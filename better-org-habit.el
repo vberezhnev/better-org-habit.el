@@ -123,6 +123,20 @@
            :value-type (choice string number boolean (repeat string))))
   :group 'habit-quest-system)
 
+(defcustom hq-categories
+  '((:name "CORE" :color "#FFD700" :xp 40 :gold 15)
+    (:name "ASCENT" :color "#4CAF50" :xp 30 :gold 10)
+    (:name "PERSONAL" :color "#6A5ACD" :xp 20 :gold 5))
+  "Список категорий задач для Habit Quest System.
+Каждая категория должна быть plist с полями :name (строка, имя категории),
+:color (строка, цвет в формате #RRGGBB), :xp (число, базовый опыт),
+:gold (число, базовое золото)."
+  :type '(repeat
+          (plist
+           :key-type symbol
+           :value-type (choice string number)))
+  :group 'habit-quest-system)
+
 ;; Org-habit: Load for habit tracking
 (load-file "./my-org-habit/my-org-habit.el")
 (load-file "./org-habit-stats/org-habit-stats.el")
@@ -252,22 +266,6 @@
   (hq-save-data)
   (message "🏆 Получено: +%d XP, +%d золота" xp gold))
 
-;;; Quest UI
-;; (defvar hq-category-colors
-;;   ;; TODO: Сделать возможность выставления своих категорий и их цветов через отдельные переменные (но также выставить дефолтные значения). Т.е сделать своего рода API внешний
-
-;;   '(("CORE" . "#FFD700")
-;;     ("ASCENT" . "#4CAF50")
-;;     ("PERSONAL" . "#6A5ACD"))
-;;   "Ассоциативный список цветов для категорий задач.")
-
-;; (defvar hq-task-rewards
-;; ;; TODO: возможно, слить параметры этой переменной с параметрами прошлой переменной, чтобы выставленные категории и награды за выставленные категории были зависимы друг от друга напрямую
-;;   '(("CORE" . (:xp 40 :gold 15))
-;;     ("ASCENT" . (:xp 30 :gold 10))
-;;     ("PERSONAL" . (:xp 20 :gold 5)))
-;;   "Ассоциативный список базовых наград (XP и золото) для категорий задач.")
-
 (defun hq-ui-width ()
   "Получить рабочую ширину для UI."
   (min 70 (- (window-width) 4)))
@@ -312,25 +310,22 @@
   "Показать потенциальную награду за выполнение задачи."
   (interactive)
   (let* ((category (or (org-entry-get nil "CATEGORY") "PERSONAL"))
-         (base-rewards (cdr (assoc category hq-task-rewards)))
+         (category-data (seq-find (lambda (cat)
+                                    (string= (plist-get cat :name) category))
+                                  hq-categories))
+         (base-xp (or (plist-get category-data :xp) 20))
+         (base-gold (or (plist-get category-data :gold) 5))
+         (category-color (or (plist-get category-data :color) "#6A5ACD"))
          (priority (org-entry-get nil "PRIORITY"))
          (priority-mult (or (cdr (assoc (and priority (aref priority 0))
-					hq-priority-multipliers))
+                                        hq-priority-multipliers))
                             1.0))
          (clock-minutes (org-clock-sum-current-item))
          (time-bonus (hq-calculate-time-bonus clock-minutes))
          (deadline-bonus (hq-calculate-deadline-bonus))
-         (potential-xp (round (* (plist-get base-rewards :xp)
-                                 priority-mult
-                                 time-bonus
-                                 deadline-bonus)))
-         (potential-gold (round (* (plist-get base-rewards :gold)
-                                   priority-mult
-                                   time-bonus
-                                   deadline-bonus)))
-         (category-color (cdr (assoc category hq-category-colors)))
+         (potential-xp (round (* base-xp priority-mult time-bonus deadline-bonus)))
+         (potential-gold (round (* base-gold priority-mult time-bonus deadline-bonus)))
          (xp-to-next-level (- 100 (mod hq-xp 100))))
-
     (goto-char (point-max))
     (insert "\n")
     (insert (hq-make-divider ?=) "\n")
