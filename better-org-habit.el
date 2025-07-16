@@ -691,7 +691,7 @@ Each category must be a plist with fields :name (string, category name),
                 (save-excursion
                   (end-of-line)
                   (let ((inhibit-read-only t))
-                    (insert " 🌟"))))))
+                    (insert " 🌟")))))))
         (forward-line 1)))))
 
 (defun hq-complete-quest (quest-name)
