@@ -1875,5 +1875,4 @@ habit data getting truncated."
 
 
 (provide 'better-org-habit-stats)
-
 ;;; better-org-habit-stats.el ends here
