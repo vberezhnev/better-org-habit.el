@@ -1,0 +1,261 @@
+* Habits                                                              :habit:
+:PROPERTIES:
+:ORG_GTD: Habits
+:ID:       8082981b-ec76-42eb-8b51-0dbb688cc990
+:PRICE:    0
+:END:
+** Everytime                                                     :everytime:
+:PROPERTIES:
+:PRICE:    0
+:ID:       fb912524-4928-4052-b9c5-0cebd8160c16
+:END:
+*** 📝 - Study
+SCHEDULED: <2025-07-16 Wed +1d>
+:PROPERTIES:
+:ID:       ЕГЭ-2025-02-16-11-05-00
+:STYLE:    habit
+:CATEGORY: EGE
+:Current_Streak: 1
+:Habit_Strength: 5.20000
+:Record_Streak: 1
+:Record_Date: 2025-02-25
+:Unstreak: 0
+:30_day_total: 1
+:30_day_percentage: 3.33%
+:Total_Completions: 1
+:Total_Percentage: 100.00%
+:LAST_REPEAT: [2025-02-25 Tue 19:27]
+:PRICE:    0
+:END:
+:LOGBOOK:
+- State "DONE"       from ""           [2025-07-16 Wed 19:27]
+- State "DONE"       from ""           [2025-07-15 Tue 19:27]
+- State "DONE"       from ""           [2025-07-14 Mon 19:27]
+- State "DONE"       from ""           [2025-07-12 Sat 19:27]
+- State "DONE"       from ""           [2025-02-25 Tue 19:27]
+- State "DONE"       from ""           [2025-02-25 Tue 19:27]
+- State "DONE"       from ""           [2025-02-24 Mon 20:02]
+:END:
+*** 🚿 - Cold Shower
+SCHEDULED: <2025-07-16 Wed +1d>
+:PROPERTIES:
+:ID:       Контрастный-душ-2025-02-05-21-16-35
+:STYLE:    habit
+:CATEGORY: PERSONAL
+:Current_Streak: 0
+:Habit_Strength: 5.43743
+:Record_Streak: 3
+:Record_Date: 2025-02-09
+:Unstreak: 6
+:30_day_total: 4
+:30_day_percentage: 13.33%
+:Total_Completions: 22
+:Total_Percentage: 28.57%
+:LAST_REPEAT: [2025-04-23 Wed 10:40]
+:PRICE:    0
+:END:
+:LOGBOOK:
+- State "DONE"       from ""           [2025-07-16 Wed 19:27]
+- State "DONE"       from ""           [2025-07-14 Mon 19:27]
+- State "DONE"       from ""           [2025-07-12 Sat 19:27]
+- State "DONE"       from ""           [2025-07-11 Fri 19:27]
+- State "DONE"       from ""           [2025-07-10 Thu 10:40]
+:END:
+*** ⚡ - 3+ hours of work 
+SCHEDULED: <2025-07-16 Wed +1d>
+:PROPERTIES:
+:ID:       3-plus-часа-работы-2025-02-05-21-27-54
+:STYLE:    habit
+:CATEGORY: PERSONAL
+:Current_Streak: 2
+:Habit_Strength: 16.47484
+:Record_Streak: 7
+:Record_Date: 2025-03-27
+:Unstreak: 0
+:30_day_total: 10
+:30_day_percentage: 33.33%
+:Total_Completions: 33
+:Total_Percentage: 36.67%
+:LAST_REPEAT: [2025-05-07 Wed 22:34]
+:PRICE:    0
+:END:
+:LOGBOOK:
+- State "DONE"       from ""           [2025-07-15 Tue 19:27]
+- State "DONE"       from ""           [2025-07-14 Mon 19:27]
+- State "DONE"       from ""           [2025-07-12 Sat 19:27]
+- State "DONE"       from ""           [2025-07-11 Fri 19:27]
+- State "DONE"       from ""           [2025-05-23 Fri 22:34]
+- State "DONE"       from ""           [2025-05-22 Thu 22:34]
+- State "DONE"       from ""           [2025-05-21 Wed 22:34]
+:END:
+*** 🚶 - 10k steps
+SCHEDULED: <2025-07-16 Wed +1d>
+:PROPERTIES:
+:ID:       10к-шагов-2025-02-06-20-49-08
+:STYLE:    habit
+:CATEGORY: PERSONAL
+:Current_Streak: 0
+:Habit_Strength: 17.71658
+:Record_Streak: 5
+:Record_Date: 2025-03-22
+:Unstreak: 1
+:30_day_total: 6
+:30_day_percentage: 20.00%
+:Total_Completions: 26
+:Total_Percentage: 28.57%
+:LAST_REPEAT: [2025-05-12 Mon 14:28]
+:PRICE:    0
+:END:
+:LOGBOOK:
+- State "DONE"       from ""           [2025-07-14 Mon 19:27]
+- State "DONE"       from ""           [2025-07-13 Sun 19:27]
+- State "DONE"       from ""           [2025-07-12 Sat 19:27]
+- State "DONE"       from ""           [2025-07-11 Fri 19:27]
+- State "DONE"       from ""           [2025-07-10 Thu 10:40]
+:END:
+** Morning                                                         :morning:
+:PROPERTIES:
+:PRICE:    0
+:ID:       60a35198-351c-4888-b87e-69c0539ad3c1
+:END:
+*** ⏰ - Wakeup as planned
+SCHEDULED: <2025-07-16 Wed +1d>
+:PROPERTIES:
+:ID:       Проснуться-в-05-30-2025-02-08-06-54-53
+:STYLE:    habit
+:CATEGORY: PERSONAL
+:Current_Streak: 0
+:Habit_Strength: 10.42678
+:Record_Streak: 7
+:Record_Date: 2025-02-28
+:Unstreak: 7
+:30_day_total: 7
+:30_day_percentage: 23.33%
+:Total_Completions: 26
+:Total_Percentage: 33.33%
+:LAST_REPEAT: [2025-04-26 Sat 06:28]
+:LAST_STATE: DONE
+:PRICE:    0
+:END:
+:LOGBOOK:
+- State "DONE"       from ""           [2025-07-16 Wed 19:27]
+- State "DONE"       from ""           [2025-07-15 Tue 19:27]
+- State "DONE"       from ""           [2025-07-14 Mon 19:27]
+- State "DONE"       from ""           [2025-07-13 Sun 19:27]
+- State "DONE"       from ""           [2025-07-12 Sat 19:27]
+- State "DONE"       from ""           [2025-07-11 Fri 10:40]
+:END:
+*** 💊 - Pills
+SCHEDULED: <2025-07-16 Wed +1d>
+:PROPERTIES:
+:ID:       БАДы-2025-02-06-20-49-18123
+:STYLE:    habit
+:CATEGORY: PERSONAL
+:RESET_CHECK_BOXES: t
+:Current_Streak: 1
+:Habit_Strength: 51.02943
+:Record_Streak: 18
+:Record_Date: 2025-03-30
+:Unstreak: 0
+:30_day_total: 19
+:30_day_percentage: 63.33%
+:Total_Completions: 74
+:Total_Percentage: 71.84%
+:LAST_REPEAT: [2025-05-20 Tue 15:34]
+:PRICE:    0
+:END:
+:LOGBOOK:
+- State "DONE"       from ""           [2025-07-16 Wed 19:27]
+- State "DONE"       from ""           [2025-07-14 Mon 19:27]
+- State "DONE"       from ""           [2025-07-13 Sun 19:27]
+- State "DONE"       from ""           [2025-07-12 Sat 19:27]
+- State "DONE"       from ""           [2025-07-07 Mon 10:40]
+:END:
+** Day                                                                 :day:
+:PROPERTIES:
+:PRICE:    0
+:ID:       1f80bd90-899f-4dc8-8f78-4218c202d8c4
+:END:
+*** 💊 - Pills
+SCHEDULED: <2025-07-16 Wed +1d>
+:PROPERTIES:
+:ID:       БАДы-2025-02-06-20-49-18
+:STYLE:    habit
+:CATEGORY: PERSONAL
+:RESET_CHECK_BOXES: t
+:Current_Streak: 3
+:Habit_Strength: 48.15152
+:Record_Streak: 17
+:Record_Date: 2025-03-29
+:Unstreak: 0
+:30_day_total: 17
+:30_day_percentage: 56.67%
+:Total_Completions: 47
+:Total_Percentage: 72.31%
+:LAST_REPEAT: [2025-05-15 Thu 19:24]
+:PRICE:    0
+:END:
+:LOGBOOK:
+- State "DONE"       from ""           [2025-07-15 Tue 19:27]
+- State "DONE"       from ""           [2025-07-13 Sun 19:27]
+- State "DONE"       from ""           [2025-07-12 Sat 19:27]
+- State "DONE"       from ""           [2025-07-07 Mon 10:40]
+:END:
+** Evening                                                         :evening:
+:PROPERTIES:
+:PRICE:    0
+:ID:       f1ee097f-e8b0-411c-8f4e-aed6c2efa27e
+:END:
+*** 😴 - Go to sleep as planned
+SCHEDULED: <2025-07-16 Wed +1d>
+:PROPERTIES:
+:ID:       Соблюдение-режима-сна-2025-02-05-21-16-51
+:STYLE:    habit
+:CATEGORY: PERSONAL
+:Current_Streak: 0
+:Habit_Strength: 0.02922
+:Record_Streak: 7
+:Record_Date: 2025-02-27
+:Unstreak: 56
+:30_day_total: 0
+:30_day_percentage: 0.00%
+:Total_Completions: 27
+:Total_Percentage: 18.88%
+:LAST_REPEAT: [2025-06-29 Sun 12:06]
+:PRICE:    0
+:END:
+:LOGBOOK:
+- State "DONE"       from ""           [2025-07-16 Wed 19:27]
+- State "DONE"       from ""           [2025-07-14 Mon 19:27]
+- State "DONE"       from ""           [2025-07-13 Sun 19:27]
+- State "DONE"       from ""           [2025-07-07 Mon 10:40]
+:END:
+*** 📔 - Diary >5 minutes
+SCHEDULED: <2025-07-16 Wed +1d>
+:PROPERTIES:
+:ID:       Ведение-дневника-5-минут-2025-02-08-20-18-15
+:STYLE:    habit
+:CATEGORY: PERSONAL
+:Current_Streak: 0
+:Habit_Strength: 3.78214
+:Record_Streak: 2
+:Record_Date: 2025-02-13
+:Unstreak: 4
+:30_day_total: 1
+:30_day_percentage: 3.33%
+:Total_Completions: 7
+:Total_Percentage: 6.86%
+:LAST_REPEAT: [2025-05-21 Wed 02:53]
+:PRICE:    0
+:END:
+:LOGBOOK:
+- State "DONE"       from ""           [2025-05-20 Tue 02:53]
+- State "DONE"       from ""           [2025-05-19 Mon 02:53]
+- State "DONE"       from ""           [2025-05-16 Fri 06:49]
+- State "DONE"       from ""           [2025-04-18 Fri 06:49]
+- State "DONE"       from ""           [2025-04-17 Thu 07:04]
+- State "DONE"       from ""           [2025-03-10 Mon 21:03]
+- State "DONE"       from ""           [2025-02-12 Wed 22:42]
+- State "DONE"       from ""           [2025-02-11 Tue 22:42]
+- State "DONE"       from ""           [2025-02-08 Sat 20:18]
+:END:
