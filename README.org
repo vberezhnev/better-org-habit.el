@@ -119,18 +119,13 @@ Here’s an example configuration for a user tracking work and personal habits:
 
 This configuration adds a "WORK" category, a quest for consistent work hours, and a coffee break reward in the store.
 
-** Customizing Habit Display
-The package customizes ~org-habit~ faces to use specific glyphs (e.g., ~○~, ~●~, ~◎~) for habit states. These can be adjusted by modifying variables like ~org-habit-overdue-glyph~. Note: The current implementation may display glyphs as narrow rectangles with some fonts. A fix is planned (see TODO in the code).
-
 * Ideas and Alternatives
 Org mode’s built-in habit tracking (~org-habit~) provides basic streak tracking but lacks gamification. ~better-org-habit~ adds a layer of motivation through quests, rewards, and a store, making habit tracking more engaging.
 
-Alternatives include:
-- *Habitica*: A standalone app with similar gamification but no Org mode integration.
-- *org-habit-stats*: Provides detailed habit statistics but lacks the quest and reward system.
-- *Manual Tracking*: Using Org mode’s agenda and TODO states without gamification, which is less motivating for some users.
-
-This package is ideal for users who want to combine Org mode’s flexibility with a gamified experience to stay motivated.
+Alternatives:
+- *Habitica*
+- *org-habit-stats*
+- *Manual Tracking*
 
 * Known Issues
 - *Glyph Display*: ~org-habit-faces~ may appear as narrow rectangles with default Emacs fonts. A future update will address this without requiring a specific font.
