@@ -1,4 +1,4 @@
-;;; org-habit.el --- The habit tracking code for Org -*- lexical-binding: t; -*-
+;;; better-org-habit-custom.el --- The habit tracking code for Org -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2009-2024 Free Software Foundation, Inc.
 
@@ -542,6 +542,6 @@ See `org-habit-show-all-today'."
 
 (org-defkey org-agenda-mode-map "K" 'org-habit-toggle-display-in-agenda)
 
-(provide 'org-habit)
+(provide 'better-org-habit-custom)
 
-;;; org-habit.el ends here
+;;; better-org-habit-custom.el ends here

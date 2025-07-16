@@ -14,6 +14,9 @@
 ;; With Emacs's default font, org-habit-faces appear as narrow rectangles.
 ;; Consider how to fix this without requiring a specific font to be set globally in Emacs.
 
+(require 'better-org-habit-custom)
+(require 'better-org-habit-stats)
+
 (require 'org)
 (require 'org-agenda)
 (require 'cl-lib)
@@ -139,10 +142,6 @@ Each category must be a plist with fields :name (string, category name),
            :value-type (choice string number)))
   :group 'habit-quest-system)
 
-;; Org-habit: Load for habit tracking
-(load-file "./my-org-habit/my-org-habit.el")
-(load-file "./org-habit-stats/org-habit-stats.el")
-
 (progn
   (custom-set-faces
    '(org-habit-clear-face
@@ -212,6 +211,7 @@ Each category must be a plist with fields :name (string, category name),
         org-habit-today-glyph ?◎
         org-habit-completed-glyph ?●
         org-habit-show-done-always-green t))
+
 (defun toggle-org-habit-show-all-today ()
   "Toggle the value of `org-habit-show-all-today' between t and nil."
   (interactive)

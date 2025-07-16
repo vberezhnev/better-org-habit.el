@@ -1,4 +1,4 @@
-;;; org-habit-stats.el --- Display info about habits  -*- lexical-binding: t; -*-
+;;; better-org-habit-stats.el --- Display info about habits  -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (C) 2022 ml729
 ;;
@@ -32,7 +32,7 @@
 
 ;;; Code:
 
-(require 'org-habit)
+(require 'better-org-habit-custom)
 (require 'org-element)
 (require 'cl-lib)
 (require 'seq)
@@ -1874,5 +1874,6 @@ habit data getting truncated."
   (setq org-habit-stats-graph-face-list (org-habit-stats-graph-create-faces)))
 
 
-(provide 'org-habit-stats)
-;;; org-habit-stats.el ends here
+(provide 'better-org-habit-stats)
+
+;;; better-org-habit-stats.el ends here
