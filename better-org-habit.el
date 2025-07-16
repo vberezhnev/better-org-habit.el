@@ -1,9 +1,9 @@
 ;;; better-org-habit.el --- Enhanced habit tracking with gamification for Org mode -*- lexical-binding: t; -*-
 
-;; Author: Your Name
+;; Author: Vladimir Berezhnev
 ;; Keywords: org, habits, gamification
-;; Version: 0.1
-;; URL: (Your URL or repository)
+;; Version: 0.2
+;; URL: https://github.com/vberezhnev/better-org-habit.el
 
 ;;; Commentary:
 ;; This package enhances Org mode with a gamified habit tracking system,
