@@ -10,7 +10,9 @@
 ;; including quests, a market, and a customizable UI for tracking habits and tasks.
 
 ;;; Code:
-;; FIXME: Нормально (квадратиком) org-habit-faces отображаются только при определенных шрифтах (как, например, Aporetic). С дефолтным шрифтом имакса org-habit-faces отображаются узким прямоугольником. Подумать, можно ли это как-то пофиксить, не прибегая к обязательному глобальному выставлению определенного шрифта в имаксе 
+;; FIXME: org-habit-faces display correctly (as squares) only with specific fonts (e.g., Aporetic).
+;; With Emacs's default font, org-habit-faces appear as narrow rectangles.
+;; Consider how to fix this without requiring a specific font to be set globally in Emacs.
 
 (require 'org)
 (require 'org-agenda)
@@ -26,12 +28,12 @@
 
 ;;; Market Categories
 (defcustom hq-market-categories
-  '((:id "rest" :name "Отдых" :icon "🌟" :description "Способы отдохнуть и восстановиться")
-    (:id "entertainment" :name "Развлечения" :icon "🎮" :description "Развлекательные активности")
-    (:id "bonus" :name "Бонусы" :icon "✨" :description "Особые привилегии")
-    (:id "rare" :name "Редкие товары" :icon "💎" :description "Специальные предметы"))
-  "Список категорий товаров в магазине Habit Quest System.
-Каждая категория должна быть plist с полями :id, :name, :icon и :description."
+  '((:id "rest" :name "Rest" :icon "🌟" :description "Ways to rest and recover")
+    (:id "entertainment" :name "Entertainment" :icon "🎮" :description "Fun activities")
+    (:id "bonus" :name "Bonuses" :icon "✨" :description "Special privileges")
+    (:id "rare" :name "Rare Items" :icon "💎" :description "Unique items"))
+  "List of item categories in the Habit Quest System store.
+Each category must be a plist with fields :id, :name, :icon, and :description."
   :type '(repeat
           (plist
            :key-type symbol
@@ -40,47 +42,47 @@
 
 ;;; Market Items
 (defcustom hq-market-items
-  '((:id "break-30" :name "Перерыв 30 минут" :cost 30 :category "rest"
-     :description "Короткий перерыв для отдыха"
-     :use-message "Отдохните и восстановите силы!")
-    (:id "break-60" :name "Час отдыха" :cost 50 :category "rest"
-     :description "Полноценный час отдыха"
-     :use-message "Целый час для восстановления сил!")
-    (:id "nap" :name "Дневной сон" :cost 80 :category "rest"
-     :description "15-20 минут сна для восстановления энергии"
-     :use-message "Приятного и восстанавливающего сна!")
-    (:id "episode" :name "Серия сериала" :cost 60 :category "entertainment"
-     :description "Просмотр одной серии любимого сериала"
-     :use-message "Приятного просмотра!")
-    (:id "movie" :name "Фильм" :cost 100 :category "entertainment"
-     :description "Просмотр одного фильма"
-     :use-message "Наслаждайтесь фильмом!")
-    (:id "gaming" :name "Игровая сессия" :cost 120 :category "entertainment"
-     :description "1 час любимых игр"
-     :use-message "Веселой игры!")
+  '((:id "break-30" :name "30-Minute Break" :cost 30 :category "rest"
+     :description "A short break to rest"
+     :use-message "Relax and recharge!")
+    (:id "break-60" :name "One-Hour Rest" :cost 50 :category "rest"
+     :description "A full hour of rest"
+     :use-message "Enjoy a full hour of relaxation!")
+    (:id "nap" :name "Power Nap" :cost 80 :category "rest"
+     :description "15-20 minutes of sleep to restore energy"
+     :use-message "Enjoy a refreshing nap!")
+    (:id "episode" :name "TV Show Episode" :cost 60 :category "entertainment"
+     :description "Watch one episode of your favorite show"
+     :use-message "Enjoy watching!")
+    (:id "movie" :name "Movie" :cost 100 :category "entertainment"
+     :description "Watch a full movie"
+     :use-message "Enjoy the movie!")
+    (:id "gaming" :name "Gaming Session" :cost 120 :category "entertainment"
+     :description "1 hour of your favorite games"
+     :use-message "Have fun gaming!")
     (:id "youtube" :name "YouTube Time" :cost 40 :category "entertainment"
-     :description "30 минут на YouTube"
-     :use-message "Приятного просмотра!")
-    (:id "delay-1h" :name "Отсрочка на час" :cost 70 :category "bonus"
-     :description "Отложить одну задачу на 1 час"
-     :use Sue "Задача отложена на час.")
-    (:id "music" :name "Музыка во время работы" :cost 30 :category "bonus"
-     :description "1 час музыки во время работы"
-     :use-message "Наслаждайтесь музыкой!")
-    (:id "late-wake" :name "Поздний подъём" :cost 150 :category "bonus"
-     :description "Разрешение встать на час позже"
-     :use-message "Можете поспать подольше!")
-    (:id "day-off" :name "Выходной день" :cost 500 :category "rare"
-     :description "Полный выходной от всех задач"
+     :description "30 minutes on YouTube"
+     :use-message "Enjoy watching!")
+    (:id "delay-1h" :name "One-Hour Task Delay" :cost 70 :category "bonus"
+     :description "Postpone a task by 1 hour"
+     :use-message "Task delayed by one hour.")
+    (:id "music" :name "Music During Work" :cost 30 :category "bonus"
+     :description "1 hour of music while working"
+     :use-message "Enjoy the music!")
+    (:id "late-wake" :name "Late Wake-Up" :cost 150 :category "bonus"
+     :description "Permission to wake up one hour later"
+     :use-message "Sleep in a bit longer!")
+    (:id "day-off" :name "Day Off" :cost 500 :category "rare"
+     :description "A full day off from all tasks"
      :discountable nil
-     :use-message "Наслаждайтесь заслуженным выходным!")
-    (:id "weekend" :name "Игровые выходные" :cost 1000 :category "rare"
-     :description "Полноценные выходные для игр"
+     :use-message "Enjoy your well-deserved day off!")
+    (:id "weekend" :name "Gaming Weekend" :cost 1000 :category "rare"
+     :description "A full weekend dedicated to gaming"
      :discountable nil
-     :use-message "Веселых игровых выходных!"))
-  "Список товаров в магазине Habit Quest System.
-Каждый товар должен быть plist с полями :id, :name, :cost, :category, :description,
-:use-message и необязательным :discountable."
+     :use-message "Have a fun gaming weekend!"))
+  "List of items in the Habit Quest System store.
+Each item must be a plist with fields :id, :name, :cost, :category, :description,
+:use-message, and optional :discountable."
   :type '(repeat
           (plist
            :key-type symbol
@@ -89,34 +91,34 @@
 
 ;;; Quests
 (defcustom hq-quests
-  '((:id 1 :name "Путь к осознанности"
-     :description "Выполните все три медитации 5 дней подряд"
-     :habits ("🎯‍ - Утренняя медитация" "🌟️ - Дневная медитация" "🌿 - Вечерняя медитация")
+  '((:id 1 :name "Path to Mindfulness"
+     :description "Complete all three meditations for 5 consecutive days"
+     :habits ("🎯 - Morning Meditation" "🌟 - Midday Meditation" "🌿 - Evening Meditation")
      :required 5 :progress 0 :completed nil
      :reward-xp 200 :reward-gold 100)
-    (:id 2 :name "Железная дисциплина"
-     :description "Просыпайтесь в 05:30 7 дней подряд"
-     :habits ("⏰ - Проснуться в 05;30")
+    (:id 2 :name "Iron Discipline"
+     :description "Wake up at 05:30 for 7 consecutive days"
+     :habits ("⏰ - Wake up at 05:30")
      :required 7 :progress 0 :completed nil
      :reward-xp 300 :reward-gold 150)
-    (:id 3 :name "Энергетический баланс"
-     :description "Выпивайте 2 литра воды и делайте 10к шагов 10 дней подряд"
-     :habits ("💧 - 2 литра воды" "🚶 - 10к шагов")
+    (:id 3 :name "Energy Balance"
+     :description "Drink 2 liters of water and walk 10k steps for 10 consecutive days"
+     :habits ("💧 - 2 liters of water" "🚶 - 10k steps")
      :required 10 :progress 0 :completed nil
      :reward-xp 400 :reward-gold 200)
-    (:id 4 :name "Фокус на учебе"
-     :description "Готовьтесь к ЕГЭ 5 дней подряд"
-     :habits ("📝 - ЕГЭ")
+    (:id 4 :name "Study Focus"
+     :description "Prepare for exams for 5 consecutive days"
+     :habits ("📝 - Exam Preparation")
      :required 5 :progress 0 :completed nil
      :reward-xp 400 :reward-gold 400)
-    (:id 5 :name "Режим бодрости"
-     :description "Принимайте контрастный душ 7 дней подряд"
-     :habits ("🚿 - Контрастный душ")
+    (:id 5 :name "Vigor Mode"
+     :description "Take a contrast shower for 7 consecutive days"
+     :habits ("🚿 - Contrast Shower")
      :required 7 :progress 0 :completed nil
      :reward-xp 140 :reward-gold 70))
-  "Список квестов в Habit Quest System.
-Каждый квест должен быть plist с полями :id, :name, :description, :habits, :required,
-:progress, :completed, :reward-xp и :reward-gold."
+  "List of quests in the Habit Quest System.
+Each quest must be a plist with fields :id, :name, :description, :habits, :required,
+:progress, :completed, :reward-xp, and :reward-gold."
   :type '(repeat
           (plist
            :key-type symbol
@@ -127,10 +129,10 @@
   '((:name "CORE" :color "#FFD700" :xp 40 :gold 15)
     (:name "ASCENT" :color "#4CAF50" :xp 30 :gold 10)
     (:name "PERSONAL" :color "#6A5ACD" :xp 20 :gold 5))
-  "Список категорий задач для Habit Quest System.
-Каждая категория должна быть plist с полями :name (строка, имя категории),
-:color (строка, цвет в формате #RRGGBB), :xp (число, базовый опыт),
-:gold (число, базовое золото)."
+  "List of task categories for the Habit Quest System.
+Each category must be a plist with fields :name (string, category name),
+:color (string, color in #RRGGBB format), :xp (number, base experience),
+:gold (number, base gold)."
   :type '(repeat
           (plist
            :key-type symbol
@@ -145,60 +147,60 @@
   (custom-set-faces
    '(org-habit-clear-face
      ((t (:background "pale green"
-                      :foreground "white"
-                      :width expanded
-                      :height 1.0
-                      :family "Iosevka"
-                      :box (:line-width (1 . 1) :color "white")))))
+                     :foreground "white"
+                     :width expanded
+                     :height 1.0
+                     :family "Iosevka"
+                     :box (:line-width (1 . 1) :color "white")))))
    '(org-habit-clear-future-face
      ((t (:background "gray"
-                      :foreground "white"
-                      :width expanded
-                      :height 1.0
-                      :family "Iosevka"
-                      :box (:line-width (1 . 1) :color "white")))))
+                     :foreground "white"
+                     :width expanded
+                     :height 1.0
+                     :family "Iosevka"
+                     :box (:line-width (1 . 1) :color "white")))))
    '(org-habit-alert-future-face
      ((t (:background "light coral"
-                      :foreground "white"
-                      :width expanded
-                      :height 1.0
-                      :family "Iosevka"
-                      :box (:line-width (1 . 1) :color "white")))))
+                     :foreground "white"
+                     :width expanded
+                     :height 1.0
+                     :family "Iosevka"
+                     :box (:line-width (1 . 1) :color "white")))))
    '(org-habit-alert-face
      ((t (:background "light coral"
-                      :foreground "white"
-                      :width expanded
-                      :height 1.0
-                      :family "Iosevka"
-                      :box (:line-width (1 . 1) :color "white")))))
+                     :foreground "white"
+                     :width expanded
+                     :height 1.0
+                     :family "Iosevka"
+                     :box (:line-width (1 . 1) :color "white")))))
    '(org-habit-overdue-face
      ((t (:background "light coral"
-                      :foreground "white"
-                      :width expanded
-                      :height 1.0
-                      :family "Iosevka"
-                      :box (:line-width (1 . 1) :color "white")))))
+                     :foreground "white"
+                     :width expanded
+                     :height 1.0
+                     :family "Iosevka"
+                     :box (:line-width (1 . 1) :color "white")))))
    '(org-habit-overdue-future-face
      ((t (:background "gray"
-                      :foreground "white"
-                      :width expanded
-                      :height 1.0
-                      :family "Iosevka"
-                      :box (:line-width (1 . 1) :color "white")))))
+                     :foreground "white"
+                     :width expanded
+                     :height 1.0
+                     :family "Iosevka"
+                     :box (:line-width (1 . 1) :color "white")))))
    '(org-habit-ready-face
      ((t (:background "pale green"
-                      :foreground "white"
-                      :width expanded
-                      :height 1.0
-                      :family "Iosevka"
-                      :box (:line-width (1 . 1) :color "white")))))
+                     :foreground "white"
+                     :width expanded
+                     :height 1.0
+                     :family "Iosevka"
+                     :box (:line-width (1 . 1) :color "white")))))
    '(org-habit-ready-future-face
      ((t (:background "gray"
-                      :foreground "white"
-                      :width expanded
-                      :height 1.0
-                      :family "Iosevka"
-                      :box (:line-width (1 . 1) :color "white"))))))
+                     :foreground "white"
+                     :width expanded
+                     :height 1.0
+                     :family "Iosevka"
+                     :box (:line-width (1 . 1) :color "white"))))))
   (setq org-habit-following-days 1
         org-habit-preceding-days 6
         org-habit-show-habits nil
@@ -215,23 +217,23 @@
   (interactive)
   (setq org-habit-show-all-today (not org-habit-show-all-today))
   (message "org-habit-show-all-today is now %s"
-           (if org-habit-show-all-today "nil" "t"))
+           (if org-habit-show-all-today "t" "nil"))
   (org-agenda-refresh))
 (define-key org-agenda-mode-map (kbd "<f12>") 'toggle-org-habit-show-all-today)
 
 ;; Org-habit-stats: Load for habit statistics
 (add-hook 'org-after-todo-state-change-hook 'org-habit-stats-update-properties)
 (add-hook 'org-agenda-mode-hook
-	  (lambda () (define-key org-agenda-mode-map "Z" 'org-habit-stats-view-next-habit-in-agenda)))
+          (lambda () (define-key org-agenda-mode-map "Z" 'org-habit-stats-view-next-habit-in-agenda)))
 
 ;;; Quest System Core
-(defvar hq-xp 0 "Общий опыт персонажа")
-(defvar hq-level 1 "Уровень персонажа")
-(defvar hq-gold 0 "Золото персонажа")
-(defvar hq-inventory '() "Предметы в инвентаре игрока.")
+(defvar hq-xp 0 "Total character experience")
+(defvar hq-level 1 "Character level")
+(defvar hq-gold 0 "Character gold")
+(defvar hq-inventory '() "Items in the player's inventory.")
 
 (defun hq-save-data ()
-  "Сохранить данные квестовой системы."
+  "Save the quest system data."
   (with-temp-file "~/.emacs.d/habit-quest-data.el"
     (prin1 (list hq-xp
                  hq-level
@@ -243,7 +245,7 @@
            (current-buffer))))
 
 (defun hq-load-data ()
-  "Загрузить данные квестовой системы."
+  "Load the quest system data."
   (when (file-exists-p "~/.emacs.d/habit-quest-data.el")
     (with-temp-buffer
       (insert-file-contents "~/.emacs.d/habit-quest-data.el")
@@ -259,25 +261,25 @@
               hq-penalty-history (nth 7 data))))))
 
 (defun hq-add-xp-and-gold (xp gold)
-  "Добавить опыт и золото с обновлением уровня."
+  "Add experience and gold, updating the level."
   (setq hq-xp (+ hq-xp xp))
   (setq hq-level (1+ (/ hq-xp 100)))
   (setq hq-gold (+ hq-gold gold))
   (hq-save-data)
-  (message "🏆 Получено: +%d XP, +%d золота" xp gold))
+  (message "🏆 Gained: +%d XP, +%d gold" xp gold))
 
 (defun hq-ui-width ()
-  "Получить рабочую ширину для UI."
+  "Get the working width for the UI."
   (min 70 (- (window-width) 4)))
 
 (defun hq-make-divider (&optional char)
-  "Создать простой разделитель."
+  "Create a simple divider."
   (let ((divider-char (or char ?-)))
     (propertize (make-string (hq-ui-width) divider-char)
                 'face '(:foreground "#4A90E2"))))
 
 (defun hq-make-header (title)
-  "Создать заголовок с выравниванием по центру."
+  "Create a centered header."
   (let* ((width (hq-ui-width))
          (title-len (length title))
          (padding-left (/ (- width title-len) 2))
@@ -288,14 +290,14 @@
      (propertize (make-string padding-right ?\s) 'face '(:foreground "#4A90E2")))))
 
 (defun hq-make-content (content)
-  "Создать строку содержимого с фиксированной шириной."
+  "Create a content string with fixed width."
   (let* ((width (hq-ui-width))
          (content-len (length content))
          (padding (max 0 (- width content-len))))
     (concat content (make-string padding ?\s))))
 
 (defun hq-progress-bar (current max width)
-  "Создать простой прогресс-бар с ASCII-символами."
+  "Create a simple ASCII progress bar."
   (let* ((current-val (or current 0))
          (max-val (or max 1))
          (ratio (if (> max-val 0) (/ (float current-val) max-val) 0))
@@ -307,7 +309,7 @@
             "]")))
 
 (defun hq-show-potential-reward ()
-  "Показать потенциальную награду за выполнение задачи."
+  "Show the potential reward for completing a task."
   (interactive)
   (let* ((category (or (org-entry-get nil "CATEGORY") "PERSONAL"))
          (category-data (seq-find (lambda (cat)
@@ -331,26 +333,26 @@
     (insert (hq-make-divider ?=) "\n")
     (insert (hq-make-header "✨ QUEST SYSTEM ✨") "\n")
     (insert (hq-make-divider ?=) "\n")
-    (insert (propertize " ПЕРСОНАЖ " 'face '(:foreground "#5C85D6" :weight bold)) "\n")
-    (insert (format " Уровень: %d   XP: %d/100   %s   Золото: %d 🪙\n"
+    (insert (propertize " CHARACTER " 'face '(:foreground "#5C85D6" :weight bold)) "\n")
+    (insert (format " Level: %d   XP: %d/100   %s   Gold: %d 🪙\n"
                     hq-level (mod hq-xp 100)
                     (hq-progress-bar (mod hq-xp 100) 100 20)
                     hq-gold))
     (insert (hq-make-divider) "\n")
-    (insert (propertize " НАГРАДА ЗА ЗАДАЧУ " 'face '(:foreground "#5C85D6" :weight bold)) "\n")
-    (insert (format " Категория: %s\n"
+    (insert (propertize " TASK REWARD " 'face '(:foreground "#5C85D6" :weight bold)) "\n")
+    (insert (format " Category: %s\n"
                     (propertize category 'face `(:foreground ,category-color :weight bold))))
-    (insert (format " Награда: %s\n"
-                    (propertize (format "%d XP, %d золота" potential-xp potential-gold)
+    (insert (format " Reward: %s\n"
+                    (propertize (format "%d XP, %d gold" potential-xp potential-gold)
                                 'face '(:foreground "#4CAF50" :weight bold))))
-    (insert " Множители:\n")
-    (insert (format "   • Приоритет: ×%.1f\n" priority-mult))
-    (insert (format "   • Бонус за время: ×%.1f\n" time-bonus))
-    (insert (format "   • Бонус за дедлайн: ×%.1f\n" deadline-bonus))
+    (insert " Multipliers:\n")
+    (insert (format "   • Priority: ×%.1f\n" priority-mult))
+    (insert (format "   • Time Bonus: ×%.1f\n" time-bonus))
+    (insert (format "   • Deadline Bonus: ×%.1f\n" deadline-bonus))
     (insert (hq-make-divider ?=) "\n")))
 
 (defun hq-add-quest-info-to-agenda (&optional arg)
-  "Добавить улучшенную информацию о квестах в буфер agenda."
+  "Add enhanced quest information to the agenda buffer."
   (interactive)
   (let ((inhibit-read-only t))
     (let ((current-level (or hq-level 1))
@@ -361,60 +363,60 @@
       (insert (hq-make-divider ?=) "\n")
       (insert (hq-make-header "🎮 HABIT QUEST SYSTEM 🎮") "\n")
       (insert (hq-make-divider ?=) "\n")
-      (insert (propertize " ПЕРСОНАЖ " 'face '(:foreground "#5C85D6" :weight bold)) "\n")
-      (insert (format " Уровень: %d   XP: %d/100   %s   Золото: %d 🪙\n"
+      (insert (propertize " CHARACTER " 'face '(:foreground "#5C85D6" :weight bold)) "\n")
+      (insert (format " Level: %d   XP: %d/100   %s   Gold: %d 🪙\n"
                       current-level (mod current-xp 100)
                       (hq-progress-bar (mod current-xp 100) 100 20)
                       current-gold))
       (when hq-daily-bonus
         (insert (hq-make-divider) "\n")
-        (insert (propertize " ЕЖЕДНЕВНЫЙ БОНУС " 'face '(:foreground "#5C85D6" :weight bold)) "\n")
-        (insert (format " Выполните: %s\n"
+        (insert (propertize " DAILY BONUS " 'face '(:foreground "#5C85D6" :weight bold)) "\n")
+        (insert (format " Complete: %s\n"
                         (propertize (plist-get hq-daily-bonus :habit)
                                     'face '(:foreground "#4ECDC4" :weight bold))))
-        (insert (format " Награда: %s\n"
-                        (propertize (format "+%d XP, +%d золота"
+        (insert (format " Reward: %s\n"
+                        (propertize (format "+%d XP, +%d gold"
                                             (or (plist-get hq-daily-bonus :xp) 0)
                                             (or (plist-get hq-daily-bonus :gold) 0))
                                     'face '(:foreground "#4CAF50" :weight bold)))))
       (insert (hq-make-divider) "\n")
-      (insert (propertize " АКТИВНЫЕ КВЕСТЫ " 'face '(:foreground "#5C85D6" :weight bold)) "\n")
+      (insert (propertize " ACTIVE QUESTS " 'face '(:foreground "#5C85D6" :weight bold)) "\n")
       (let ((active-quests 0))
         (dolist (quest hq-quests)
           (unless (plist-get quest :completed)
             (setq active-quests (1+ active-quests))
-            (let* ((name (or (plist-get quest :name) "Неизвестный квест"))
+            (let* ((name (or (plist-get quest :name) "Unknown Quest"))
                    (progress (or (plist-get quest :progress) 0))
                    (required (or (plist-get quest :required) 1))
                    (progress-percent (if (> required 0)
                                          (* (/ (float progress) required) 100)
                                        0.0))
                    (quest-icon (cond
-				((>= progress required) "✅")
-				((>= progress (/ required 2)) "🔶")
-				(t "🔷"))))
+                                ((>= progress required) "✅")
+                                ((>= progress (/ required 2)) "🔶")
+                                (t "🔷"))))
               (insert (format " %s %s\n" quest-icon
                               (propertize name 'face '(:foreground "#4A90E2" :weight bold))))
-              (insert (format "   %d/%d дней %s %.1f%%\n"
+              (insert (format "   %d/%d days %s %.1f%%\n"
                               progress required
                               (hq-progress-bar progress required 20)
                               progress-percent))
-              (insert (format "   Награда: %s\n\n"
-                              (propertize (format "+%d XP, +%d золота"
+              (insert (format "   Reward: %s\n\n"
+                              (propertize (format "+%d XP, +%d gold"
                                                   (or (plist-get quest :reward-xp) 0)
                                                   (or (plist-get quest :reward-gold) 0))
                                           'face '(:foreground "#4CAF50")))))))
         (when (zerop active-quests)
-          (insert (propertize " Нет активных квестов\n"
+          (insert (propertize " No active quests\n"
                               'face '(:foreground "#888888" :slant italic))))
         (insert (hq-make-divider) "\n")
-        (insert (propertize " МАГАЗИН " 'face '(:foreground "#5C85D6" :weight bold)) "\n")
+        (insert (propertize " STORE " 'face '(:foreground "#5C85D6" :weight bold)) "\n")
         (let ((market-button
-               (propertize " 🏪 ОТКРЫТЬ МАГАЗИН "
+               (propertize " 🏪 OPEN STORE "
                            'face '(:foreground "white"
-                                               :background "#4CAF50"
-                                               :weight bold
-                                               :box (:line-width 2 :style released-button))
+                                       :background "#4CAF50"
+                                       :weight bold
+                                       :box (:line-width 2 :style released-button))
                            'mouse-face 'highlight
                            'keymap (let ((map (make-sparse-keymap)))
                                      (define-key map [mouse-1] 'hq-market)
@@ -422,36 +424,36 @@
           (insert " " market-button "\n"))
         (insert (hq-make-divider ?=) "\n")))))
 
-(defvar hq-market-discount nil "Текущая скидка в магазине (процент).")
-(defvar hq-market-discount-duration nil "Время действия текущей скидки.")
-(defvar hq-market-last-refresh nil "Время последнего обновления магазина.")
+(defvar hq-market-discount nil "Current discount in the store (percentage).")
+(defvar hq-market-discount-duration nil "Duration of the current discount.")
+(defvar hq-market-last-refresh nil "Time of the last store refresh.")
 
 (defun hq-market-apply-random-discount ()
-  "Применить случайную скидку к товарам."
+  "Apply a random discount to items."
   (let ((discount (nth (random 3) '(10 20 30))))
     (setq hq-market-discount discount)
     (setq hq-market-discount-duration (time-add (current-time) (days-to-time 1)))
     (setq hq-market-last-refresh (current-time))))
 
 (defun hq-market-check-discount ()
-  "Проверить и обновить статус скидки."
+  "Check and update the discount status."
   (when (and hq-market-discount-duration
              (time-less-p hq-market-discount-duration (current-time)))
     (setq hq-market-discount nil)
     (setq hq-market-discount-duration nil)))
 
 (defun hq-market-add-to-inventory (item-id)
-  "Добавить предмет в инвентарь."
+  "Add an item to the inventory."
   (push item-id hq-inventory)
   (hq-save-data))
 
 (defun hq-market-remove-from-inventory (item-id)
-  "Удалить предмет из инвентаря."
+  "Remove an item from the inventory."
   (setq hq-inventory (delete item-id hq-inventory))
   (hq-save-data))
 
 (defun hq-market ()
-  "Открыть интерактивный магазин с кнопками покупки и использования."
+  "Open an interactive store with purchase and use buttons."
   (interactive)
   (hq-market-check-discount)
   (let ((buffer (get-buffer-create "*Habit Market*")))
@@ -463,11 +465,11 @@
                      'face '(:height 1.5 :weight bold :foreground "#4A90E2"))
          (propertize "============================\n"
                      'face '(:foreground "#4A90E2"))
-         (propertize (format "💰 Баланс: %d золота\n" hq-gold)
+         (propertize (format "💰 Balance: %d gold\n" hq-gold)
                      'face '(:weight bold)))
         (when hq-market-discount
           (insert
-           (propertize (format "🔥 СКИДКА %d%%! 🔥\n" hq-market-discount)
+           (propertize (format "🔥 %d%% DISCOUNT! 🔥\n" hq-market-discount)
                        'face '(:foreground "#FF5722" :weight bold))))
         (insert "\n")
         (dolist (category hq-market-categories)
@@ -495,19 +497,19 @@
                       (insert (propertize (format "🪙%d→%d" item-cost final-cost)
                                           'face '(:foreground "#FFD700" :weight bold)))
                     (insert (propertize (format "🪙%d" final-cost)
-					'face '(:foreground "#FFD700" :weight bold))))
+                                        'face '(:foreground "#FFD700" :weight bold))))
                   (insert " ")
                   (if in-inventory
-                      (insert-text-button "Использовать"
+                      (insert-text-button "Use"
                                           'action (lambda (_) (hq-market-use-item item-id))
                                           'follow-link t
                                           'face '(:foreground "white" :background "#4CAF50" :weight bold))
                     (if (>= hq-gold final-cost)
-                        (insert-text-button "Купить"
+                        (insert-text-button "Buy"
                                             'action (lambda (_) (hq-market-buy-item item-id))
                                             'follow-link t
                                             'face '(:foreground "white" :background "#2196F3" :weight bold))
-                      (insert (propertize " ❌ Недостаточно золота"
+                      (insert (propertize " ❌ Insufficient gold"
                                           'face '(:foreground "#FF5722")))))
                   (insert "\n    ")
                   (insert (propertize item-desc
@@ -515,7 +517,7 @@
                   (insert "\n"))))
             (insert "\n")))
         (insert
-         (propertize "📦 Ваш инвентарь\n"
+         (propertize "📦 Your Inventory\n"
                      'face '(:weight bold :height 1.1)))
         (if hq-inventory
             (dolist (item-id hq-inventory)
@@ -524,7 +526,7 @@
                                      hq-market-items))
                      (item-name (plist-get item :name)))
                 (insert "  • " item-name "\n")))
-          (insert (propertize "  Инвентарь пуст\n"
+          (insert (propertize "  Inventory is empty\n"
                               'face '(:foreground "#888888" :slant italic)))))
       (special-mode)
       (local-set-key "q" 'quit-window)
@@ -532,7 +534,7 @@
     (switch-to-buffer buffer)))
 
 (defun hq-market-buy-item (item-id)
-  "Купить предмет из магазина."
+  "Purchase an item from the store."
   (let* ((item (seq-find (lambda (i)
                            (string= (plist-get i :id) item-id))
                          hq-market-items))
@@ -545,14 +547,14 @@
         (progn
           (setq hq-gold (- hq-gold final-cost))
           (hq-market-add-to-inventory item-id)
-          (message "✨ Вы купили %s за %d золота!"
+          (message "✨ You purchased %s for %d gold!"
                    (plist-get item :name) final-cost))
-      (message "❌ Недостаточно золота для покупки %s!"
+      (message "❌ Not enough gold to purchase %s!"
                (plist-get item :name)))
     (hq-market)))
 
 (defun hq-market-use-item (item-id)
-  "Использовать предмет из инвентаря."
+  "Use an item from the inventory."
   (let* ((item (seq-find (lambda (i)
                            (string= (plist-get i :id) item-id))
                          hq-market-items))
@@ -561,13 +563,13 @@
     (message "🎉 %s" use-message)
     (hq-market)))
 
-(defvar hq-daily-bonus nil "Текущее ежедневное бонусное задание.")
-(defvar hq-last-bonus-date nil "Дата последнего обновления бонусного задания.")
+(defvar hq-daily-bonus nil "Current daily bonus task.")
+(defvar hq-last-bonus-date nil "Date of the last bonus task update.")
 (defvar habit-stats (make-hash-table :test 'equal)
-  "Хеш-таблица для хранения статистики привычек.")
+  "Hash table for storing habit statistics.")
 
 (defun hq-calculate-combined-streak (habits habit-stats)
-  "Подсчитать количество последовательных дней, когда все привычки были выполнены."
+  "Calculate the number of consecutive days all habits were completed."
   (let ((streaks-data nil))
     (dolist (habit habits)
       (when-let ((habit-data (gethash habit habit-stats)))
@@ -590,7 +592,7 @@
         combined-streak))))
 
 (defun hq-update-quest-progress ()
-  "Обновить прогресс квестов на основе текущих стриков привычек."
+  "Update quest progress based on current habit streaks."
   (interactive)
   (clrhash habit-stats)
   (with-current-buffer "*Org Agenda*"
@@ -635,7 +637,7 @@
   (hq-save-data))
 
 (defun hq-generate-daily-bonus ()
-  "Генерировать новое ежедневное бонусное задание."
+  "Generate a new daily bonus task."
   (interactive)
   (let* ((current-date (format-time-string "%Y-%m-%d"))
          (all-habits '()))
@@ -658,20 +660,20 @@
       (hq-save-data))))
 
 (defun hq-check-daily-bonus (habit-name)
-  "Проверить, является ли привычка бонусным заданием."
+  "Check if a habit is the daily bonus task."
   (when (and hq-daily-bonus
              (string= habit-name (plist-get hq-daily-bonus :habit)))
     (let ((bonus-xp (plist-get hq-daily-bonus :xp))
           (bonus-gold (plist-get hq-daily-bonus :gold)))
       (setq hq-xp (+ hq-xp bonus-xp))
       (setq hq-gold (+ hq-gold bonus-gold))
-      (message "Бонусное задание выполнено! +%d XP, +%d золота!"
+      (message "Daily bonus task completed! +%d XP, +%d gold!"
                bonus-xp bonus-gold)
       (setq hq-daily-bonus nil)
       (hq-save-data))))
 
 (defun hq-org-habit-streak-hook ()
-  "Хук для добавления в org-habit-streak-count для интеграции с квестовой системой."
+  "Hook for adding to org-habit-streak-count for integration with the quest system."
   (with-current-buffer "*Org Agenda*"
     (save-excursion
       (goto-char (point-min))
@@ -683,19 +685,19 @@
               (with-current-buffer (marker-buffer marker)
                 (save-excursion
                   (goto-char (marker-position marker))
-                  (setq habit-name (org-get-heading t t t t)))))
-            (when (and hq-daily-bonus habit-name
-                       (string= habit-name (plist-get hq-daily-bonus :habit)))
-              (save-excursion
-                (end-of-line)
-                (let ((inhibit-read-only t))
-                  (insert " 🌟"))))))
+                  (setq habit-name (org-get-heading t t t t))))
+              (when (and hq-daily-bonus habit-name
+                         (string= habit-name (plist-get hq-daily-bonus :habit)))
+                (save-excursion
+                  (end-of-line)
+                  (let ((inhibit-read-only t))
+                    (insert " 🌟"))))))
         (forward-line 1)))))
 
 (defun hq-complete-quest (quest-name)
-  "Вручную завершить квест и получить награду."
+  "Manually complete a quest and claim its reward."
   (interactive
-   (list (completing-read "Выберите квест для завершения: "
+   (list (completing-read "Select a quest to complete: "
                           (mapcar (lambda (quest)
                                     (unless (plist-get quest :completed)
                                       (plist-get quest :name)))
@@ -716,14 +718,14 @@
             (let ((new-level (1+ (/ hq-xp 100))))
               (when (> new-level hq-level)
                 (setq hq-level new-level)
-                (message "Уровень повышен! Теперь вы уровня %d!" hq-level)))
-            (message "Квест завершен: %s! +%d XP, +%d золота!"
+                (message "Level up! You are now level %d!" hq-level)))
+            (message "Quest completed: %s! +%d XP, +%d gold!"
                      quest-name reward-xp reward-gold)))
-      (message "Квест не найден или уже завершен")))
+      (message "Quest not found or already completed")))
   (hq-save-data))
 
 (defun hq-habits-quest-view ()
-  "Отобразить agenda с информацией о квестах."
+  "Display the agenda with quest information."
   (interactive)
   (unless hq-quests
     (setq hq-quests '()))
@@ -731,7 +733,7 @@
   (condition-case err
       (org-agenda nil "x")
     (error
-     (message "Ошибка при открытии agenda: %s" err)))
+     (message "Error opening agenda: %s" err)))
   (run-with-timer 0.5 nil
                   (lambda ()
                     (when (get-buffer "*Org Agenda*")
@@ -743,10 +745,10 @@
                                 (let ((inhibit-read-only t))
                                   (hq-add-quest-info-to-agenda)))
                             (error
-                             (message "Ошибка при обновлении информации о квестах")))))))))
+                             (message "Error updating quest information")))))))))
 
 (defun hq-update-quest-info ()
-  "Обновить информацию о квестах в agenda."
+  "Update quest information in the agenda."
   (when (string= (buffer-name) "*Org Agenda*")
     (message "Updating quest progress...")
     (hq-update-quest-progress)
@@ -756,10 +758,10 @@
         (hq-add-quest-info-to-agenda)))))
 
 (defun hq-setup ()
-  "Настроить квестовую систему привычек."
+  "Set up the habit quest system."
   (interactive)
   (hq-load-data)
-  (message "Квестовая система для org-habit настроена!"))
+  (message "Habit quest system for org-habit is set up!"))
 
 ;;; Custom Functions
 (defun org-agenda-refresh ()
@@ -770,7 +772,7 @@
         (org-agenda-maybe-redo)))))
 
 (defun org-habit-count-last-streak (state-str)
-  "Подсчитать количество последовательных выполненных дней (●), включая незавершенные задачи (◎)."
+  "Count consecutive completed days (●), including incomplete tasks (◎)."
   (let ((streak 0)
         (length (length state-str))
         (has-completed nil))
@@ -803,13 +805,13 @@
     (forward-line 1)))
 
 (defun my-find-work-habit ()
-  "Находит привычку '3+ часа работы' в org-файлах и возвращает её данные."
+  "Find the '3+ hours of work' habit in org files and return its data."
   (let ((work-habit-data nil))
     (dolist (file (org-agenda-files))
       (with-current-buffer (find-file-noselect file)
         (org-with-point-at 1
           (while (and (not work-habit-data)
-                      (re-search-forward "⚡ - 3\\+ часа работы" nil t))
+                      (re-search-forward "⚡ - 3\\+ hours of work" nil t))
             (let ((pos (point)))
               (org-back-to-heading t)
               (when (org-is-habit-p)
@@ -819,7 +821,7 @@
     work-habit-data))
 
 (defun my-display-work-habit-calendar ()
-  "Отображает календарь для привычки '3+ часа работы' в начале org-agenda буфера."
+  "Display a calendar for the '3+ hours of work' habit at the start of the org-agenda buffer."
   (let ((work-habit-data (my-find-work-habit)))
     (when work-habit-data
       (org-habit-stats-make-calendar-buffer work-habit-data)
@@ -827,7 +829,7 @@
         (goto-char (point-min))
         (when (search-forward "Everytime" nil t)
           (forward-line -1)
-          (insert "\nКалендарь рабочих часов (3+ часа в день)\n")
+          (insert "\nWork Hours Calendar (3+ hours per day)\n")
           (insert "================================================================\n")
           (let ((calendar-content (with-current-buffer org-habit-stats-calendar-buffer
                                     (buffer-string)))
