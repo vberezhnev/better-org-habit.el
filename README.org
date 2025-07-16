@@ -1,0 +1,140 @@
+#+TITLE: better-org-habit.el
+
+The package enhances [[https://www.orgmode.org/][Org mode]] with a gamified habit-tracking system, integrating quests, a virtual store, and a customizable UI. It transforms routine habit tracking into an engaging RPG-like experience, where users earn experience points (XP) and gold for completing tasks and habits, which can be spent on rewards in a virtual store.
+
+Inspired by gamification concepts and habit-tracking apps like [[https://habitica.com/][Habitica]].
+
+[[./img/screenshot1.png]]
+
+[[./img/screenshot2.png]]
+
+[[./img/screenshot3.png]]
+
+* Installation
+The package is not yet available on MELPA, but you can install it manually by cloning the repository or downloading the `better-org-habit.el` file. For example, using `use-package` with `straight`:
+
+#+begin_src emacs-lisp
+(use-package better-org-habit
+  :straight (better-org-habit :type git :host github :repo "vberezhnev/better-org-habit.el"))
+#+end_src
+
+* Usage
+Running `M-x hq-habits-quest-view` opens the Org agenda with an appended quest system interface, showing character stats (level, XP, gold), active quests, daily bonuses, and a store button. A sample interface is shown in the screenshot above.
+
+The system includes:
+- **Quests**: Multi-day challenges tied to habits (e.g., "Complete morning meditation for 5 days").
+- **Store**: A virtual market where users can spend earned gold on rewards like breaks, entertainment, or special privileges.
+- **Daily Bonuses**: Randomly assigned daily tasks that grant extra XP and gold.
+- **Inventory**: Stores purchased items, which can be used to apply their effects (e.g., "Take a 30-minute break").
+- **Habit Streaks**: Tracks consecutive days of habit completion, integrated with Org mode's habit system.
+
+Available keybindings:
+
+| Keybinding      | Command                                     | Description                                                    |
+|-----------------+---------------------------------------------+----------------------------------------------------------------|
+| `C-c q`         | `hq-habits-quest-view`                      | Open the agenda with quest system information                  |
+| `C-c m`         | `hq-market`                                 | Open the interactive store to buy or use items                 |
+| `<f12>`         | `toggle-org-habit-show-all-today`           | Toggle showing all habits or only today's habits in the agenda |
+| `q` (in store)  | `quit-window`                               | Close the store buffer                                         |
+| `r` (in store)  | `hq-market`                                 | Refresh the store buffer                                       |
+| `Z` (in agenda) | `org-habit-stats-view-next-habit-in-agenda` | View stats for the next habit in the agenda                    |
+
+The package integrates with Org mode's agenda and habit system, using `org-habit` for tracking and `org-habit-stats` for statistics. Standard Org mode keybindings (e.g., for agenda navigation) and `magit-section`-like bindings (e.g., `TAB` to toggle sections) are supported.
+
+* Configuration
+** Quest System Configuration
+The quest system is highly customizable via the `habit-quest-system` customization group (`M-x customize-group RET habit-quest-system`). Key customizable variables include:
+
+- `hq-categories`: Defines task categories with associated colors, base XP, and gold rewards. Example:
+  #+begin_src emacs-lisp
+  (setq hq-categories
+        '((:name "CORE" :color "#FFD700" :xp 40 :gold 15)
+          (:name "ASCENT" :color "#4CAF50" :xp 30 :gold 10)
+          (:name "PERSONAL" :color "#6A5ACD" :xp 20 :gold 5)))
+  #+end_src
+
+- `hq-quests`: Defines multi-day quests with habits, required days, and rewards. Example:
+  #+begin_src emacs-lisp
+  (setq hq-quests
+        '((:id 1 :name "Path to Mindfulness"
+           :description "Complete all three meditations for 5 consecutive days"
+           :habits ("🎯 - Morning Meditation" "🌟 - Midday Meditation" "🌿 - Evening Meditation")
+           :required 5 :progress 0 :completed nil
+           :reward-xp 200 :reward-gold 100)))
+  #+end_src
+
+- `hq-market-categories`: Defines store categories (e.g., Rest, Entertainment). Example:
+  #+begin_src emacs-lisp
+  (setq hq-market-categories
+        '((:id "rest" :name "Rest" :icon "🌟" :description "Ways to rest and recover")))
+  #+end_src
+
+- `hq-market-items`: Defines store items with costs, categories, and usage messages. Example:
+  #+begin_src emacs-lisp
+  (setq hq-market-items
+        '((:id "break-30" :name "30-Minute Break" :cost 30 :category "rest"
+           :description "A short break to rest"
+           :use-message "Relax and recharge!")))
+  #+end_src
+
+** Habit Integration
+The package extends `org-habit` to display habit streaks and integrates with `org-habit-stats` for detailed statistics. Habits must be defined in Org files with the `:HABIT:` property. Example:
+#+begin_src org
+* TODO Morning Meditation 🎯
+  :PROPERTIES:
+  :STYLE: habit
+  :END:
+#+end_src
+
+The system automatically tracks streaks and updates quest progress based on habit completion.
+
+** Store and Discounts
+The store (`M-x hq-market`) supports dynamic discounts that apply randomly for 24 hours. Items can be marked as non-discountable with `:discountable nil`. Example:
+#+begin_src emacs-lisp
+(:id "day-off" :name "Day Off" :cost 500 :category "rare"
+ :description "A full day off from all tasks"
+ :discountable nil
+ :use-message "Enjoy your well-deserved day off!")
+#+end_src
+
+** Example Configuration
+Here’s an example configuration for a user tracking work and personal habits:
+#+begin_src emacs-lisp
+(setq hq-categories
+      '((:name "WORK" :color "#FF4500" :xp 50 :gold 20)
+        (:name "PERSONAL" :color "#6A5ACD" :xp 20 :gold 5)))
+
+(setq hq-quests
+      '((:id 1 :name "Work Marathon"
+         :description "Work 3+ hours daily for 7 days"
+         :habits ("⚡ - 3+ hours of work")
+         :required 7 :progress 0 :completed nil
+         :reward-xp 500 :reward-gold 250)))
+
+(setq hq-market-items
+      '((:id "coffee-break" :name "Coffee Break" :cost 20 :category "rest"
+         :description "15-minute coffee break"
+         :use-message "Enjoy your coffee!")))
+#+end_src
+
+This configuration adds a "WORK" category, a quest for consistent work hours, and a coffee break reward in the store.
+
+** Customizing Habit Display
+The package customizes `org-habit` faces to use specific glyphs (e.g., `○`, `●`, `◎`) for habit states. These can be adjusted by modifying variables like `org-habit-overdue-glyph`. Note: The current implementation may display glyphs as narrow rectangles with some fonts. A fix is planned (see TODO in the code).
+
+* Ideas and Alternatives
+Org mode’s built-in habit tracking (`org-habit`) provides basic streak tracking but lacks gamification. `better-org-habit` adds a layer of motivation through quests, rewards, and a store, making habit tracking more engaging.
+
+Alternatives include:
+- **Habitica**: A standalone app with similar gamification but no Org mode integration.
+- **org-habit-stats**: Provides detailed habit statistics but lacks the quest and reward system.
+- **Manual Tracking**: Using Org mode’s agenda and TODO states without gamification, which is less motivating for some users.
+
+This package is ideal for users who want to combine Org mode’s flexibility with a gamified experience to stay motivated.
+
+* Known Issues
+- **Glyph Display**: `org-habit-faces` may appear as narrow rectangles with default Emacs fonts. A future update will address this without requiring a specific font.
+- **Dependencies**: Requires `my-org-habit.el` and `org-habit-stats.el`, which must be correctly placed in the specified directories.
+
+* Contributing
+Contributions are welcome! Please submit issues or pull requests to [[https://github.com/vberezhnev/better-org-habit.el][the GitHub repository]]. Ideas for new quests, store items, or UI improvements are especially appreciated.
