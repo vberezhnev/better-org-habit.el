@@ -4,11 +4,8 @@ The package enhances [[https://www.orgmode.org/][Org mode]] with a gamified habi
 
 Inspired by gamification concepts and habit-tracking apps like [[https://habitica.com/][Habitica]].
 
-[[./img/screenshot1.png]]
-
-[[./img/screenshot2.png]]
-
-[[./img/screenshot3.png]]
+| [[./img/screenshot1.png]] | [[./img/screenshot2.png]] | [[./img/screenshot3.png]] |
+/Habits, challanges and marketpalce/
 
 * Installation
 The package is not yet available on MELPA, but you can install it manually by cloning the repository or downloading the ~better-org-habit.el~ file. For example, using ~use-package~ with ~straight~:
@@ -17,6 +14,12 @@ The package is not yet available on MELPA, but you can install it manually by cl
 (use-package better-org-habit
   :straight (better-org-habit :type git :host github :repo "vberezhnev/better-org-habit.el"))
 #+end_src
+
+* Motivation
+I don't like built-in org-habit, because it's looks like shit. Bruh.
+
+#+ATTR_HTML: :width 400px
+[[./img/shit.png]]
 
 * Usage
 Running ~M-x hq-habits-quest-view~ opens the Org agenda with an appended quest system interface, showing character stats (level, XP, gold), active quests, daily bonuses, and a store button. A sample interface is shown in the screenshot above.
