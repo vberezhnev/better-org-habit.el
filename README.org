@@ -16,10 +16,7 @@ The package is not yet available on MELPA, but you can install it manually by cl
 #+end_src
 
 * Motivation
-I don't like built-in org-habit, because it's looks like shit. Bruh.
-
-#+ATTR_HTML: :width 400px
-[[./img/shit.png]]
+Huh ¯\_(ツ)_/¯
 
 * Usage
 Running ~M-x hq-habits-quest-view~ opens the Org agenda with an appended quest system interface, showing character stats (level, XP, gold), active quests, daily bonuses, and a store button. A sample interface is shown in the screenshot above.
