@@ -263,10 +263,11 @@ Each category must be a plist with fields :name (string, category name),
 (defun hq-add-xp-and-gold (xp gold)
   "Add experience and gold, updating the level."
   (setq hq-xp (+ hq-xp xp))
-  (setq hq-level (1+ (/ hq-xp 100)))
+  (setq hq-level (1+ (floor (sqrt (/ hq-xp 100.0)))))
   (setq hq-gold (+ hq-gold gold))
   (hq-save-data)
   (message "🏆 Gained: +%d XP, +%d gold" xp gold))
+
 
 (defun hq-ui-width ()
   "Get the working width for the UI."
@@ -334,10 +335,17 @@ Each category must be a plist with fields :name (string, category name),
     (insert (hq-make-header "✨ QUEST SYSTEM ✨") "\n")
     (insert (hq-make-divider ?=) "\n")
     (insert (propertize " CHARACTER " 'face '(:foreground "#5C85D6" :weight bold)) "\n")
-    (insert (format " Level: %d   XP: %d/100   %s   Gold: %d 🪙\n"
-                    hq-level (mod hq-xp 100)
-                    (hq-progress-bar (mod hq-xp 100) 100 20)
-                    hq-gold))
+    (let* ((current-lvl-floor (floor (sqrt (/ hq-xp 100.0))))
+           (xp-current-lvl (* (* current-lvl-floor current-lvl-floor) 100))
+           (xp-next-lvl (* (* (1+ current-lvl-floor) (1+ current-lvl-floor)) 100))
+           (xp-in-level (- hq-xp xp-current-lvl))
+           (xp-needed-for-level (- xp-next-lvl xp-current-lvl)))
+      (insert (format " Level: %d XP: %d/%d %s Gold: %d 🪙\n"
+                      hq-level
+                      xp-in-level
+                      xp-needed-for-level
+                      (hq-progress-bar xp-in-level xp-needed-for-level 20)
+                      hq-gold)))
     (insert (hq-make-divider) "\n")
     (insert (propertize " TASK REWARD " 'face '(:foreground "#5C85D6" :weight bold)) "\n")
     (insert (format " Category: %s\n"
@@ -364,10 +372,17 @@ Each category must be a plist with fields :name (string, category name),
       (insert (hq-make-header "🎮 HABIT QUEST SYSTEM 🎮") "\n")
       (insert (hq-make-divider ?=) "\n")
       (insert (propertize " CHARACTER " 'face '(:foreground "#5C85D6" :weight bold)) "\n")
-      (insert (format " Level: %d   XP: %d/100   %s   Gold: %d 🪙\n"
-                      current-level (mod current-xp 100)
-                      (hq-progress-bar (mod current-xp 100) 100 20)
-                      current-gold))
+      (let* ((lvl-floor (floor (sqrt (/ current-xp 100.0))))
+             (xp-current-lvl (* (* lvl-floor lvl-floor) 100))
+             (xp-next-lvl (* (* (1+ lvl-floor) (1+ lvl-floor)) 100))
+             (xp-in-level (- current-xp xp-current-lvl))
+             (xp-needed-for-level (- xp-next-lvl xp-current-lvl)))
+        (insert (format " Level: %d XP: %d/%d %s Gold: %d 🪙\n"
+                        current-level
+                        xp-in-level
+                        xp-needed-for-level
+                        (hq-progress-bar xp-in-level xp-needed-for-level 20)
+                        current-gold)))
       (when hq-daily-bonus
         (insert (hq-make-divider) "\n")
         (insert (propertize " DAILY BONUS " 'face '(:foreground "#5C85D6" :weight bold)) "\n")
