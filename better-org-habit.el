@@ -201,10 +201,10 @@ Each category must be a plist with fields :name (string, category name),
                      :family "Iosevka Nerd Font"
                      :box (:line-width (1 . 1) :color "white"))))))
   (setq org-habit-following-days 1
-        org-habit-preceding-days 6
+        org-habit-preceding-days 14 ;;6
         org-habit-show-habits nil
         org-habit-show-all-today t
-        org-habit-graph-column 60
+        org-habit-graph-column 45 ;;60
         org-habit-overdue-glyph ?○
         org-habit-alert-glyph ?○
         org-habit-ready-future-glyph ?○
