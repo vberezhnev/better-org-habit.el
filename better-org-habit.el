@@ -15,8 +15,8 @@
 ;; font. Set `better-org-habit-graph-font-family' (e.g. "Iosevka Nerd Font")
 ;; when the cells appear as narrow rectangles.
 
-;; (require 'better-org-habit-custom)
-;; (require 'better-org-habit-stats)
+(require 'better-org-habit-custom)
+(require 'better-org-habit-stats)
 
 (require 'org)
 (require 'org-agenda)
