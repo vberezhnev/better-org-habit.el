@@ -10,9 +10,9 @@
 ;; including quests, a market, and a customizable UI for tracking habits and tasks.
 
 ;;; Code:
-;; FIXME: org-habit-faces display correctly (as squares) only with specific fonts (e.g., Aporetic).
-;; With Emacs's default font, org-habit-faces appear as narrow rectangles.
-;; Consider how to fix this without requiring a specific font to be set globally in Emacs.
+;; The habit graph cells render as squares only with a proportional (non-Mono)
+;; font. The org-habit-* faces below force :family "Iosevka Nerd Font", which
+;; makes the ○/● glyphs ~square; a Mono fallback produces narrow rectangles.
 
 ;; (require 'better-org-habit-custom)
 ;; (require 'better-org-habit-stats)
