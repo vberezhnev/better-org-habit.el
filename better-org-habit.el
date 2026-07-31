@@ -591,41 +591,52 @@ Each category must be a plist with fields :name (string, category name),
           (setq day-index (1+ day-index)))
         combined-streak))))
 
+(defun hq--map-agenda-habit-lines (fn)
+  "Call FN at each habit line in the *Org Agenda* buffer.
+FN is called with point at the beginning of the habit line."
+  (when (get-buffer "*Org Agenda*")
+    (with-current-buffer "*Org Agenda*"
+      (save-excursion
+        (goto-char (point-min))
+        (while (not (eobp))
+          (when (get-text-property (point) 'org-habit-p)
+            (funcall fn))
+          (forward-line 1))))))
+
+(defun hq--habit-name-at-marker (marker)
+  "Return the heading text at MARKER, or nil."
+  (when marker
+    (with-current-buffer (marker-buffer marker)
+      (save-excursion
+        (goto-char (marker-position marker))
+        (org-get-heading t t t t)))))
+
 (defun hq-update-quest-progress ()
   "Update quest progress based on current habit streaks."
   (interactive)
   (message "Starting hq-update-quest-progress...")
   (clrhash habit-stats)
   (message "Cleared habit-stats")
-  (with-current-buffer "*Org Agenda*"
-    (save-excursion
-      (goto-char (point-min))
-      (message "Scanning agenda buffer...")
-      (while (not (eobp))
-        (when (get-text-property (point) 'org-habit-p)
-          (let* ((marker (get-text-property (point) 'org-hd-marker))
-                 (habit-name nil)
-                 (habit-streak 0)
-                 (habits-state nil))
-            (message "Processing habit at point %d" (point))
-            (when marker
-              (with-current-buffer (marker-buffer marker)
-                (save-excursion
-                  (goto-char (marker-position marker))
-                  (setq habit-name (org-get-heading t t t t)))))
-            (save-excursion
-              (end-of-line)
-              (when (re-search-backward "\\[🔥 \\([0-9]+\\)\\]" (line-beginning-position) t)
-                (setq habit-streak (string-to-number (match-string 1))))
-              (when (re-search-backward "\\([○●◎]+\\)" (line-beginning-position) t)
-                (setq habits-state (buffer-substring-no-properties
-                                    (match-beginning 1)
-                                    (match-end 1)))))
-            (when (and habit-name habit-streak)
-              (puthash habit-name
-                       (cons habit-streak (or habits-state ""))
-                       habit-stats))))
-        (forward-line 1))))
+  (message "Scanning agenda buffer...")
+  (hq--map-agenda-habit-lines
+   (lambda ()
+     (let* ((marker (get-text-property (point) 'org-hd-marker))
+            (habit-name (hq--habit-name-at-marker marker))
+            (habit-streak 0)
+            (habits-state nil))
+       (message "Processing habit at point %d" (point))
+       (save-excursion
+         (end-of-line)
+         (when (re-search-backward "\\[🔥 \\([0-9]+\\)\\]" (line-beginning-position) t)
+           (setq habit-streak (string-to-number (match-string 1))))
+         (when (re-search-backward "\\([○●◎]+\\)" (line-beginning-position) t)
+           (setq habits-state (buffer-substring-no-properties
+                               (match-beginning 1)
+                               (match-end 1)))))
+       (when (and habit-name habit-streak)
+         (puthash habit-name
+                  (cons habit-streak (or habits-state ""))
+                  habit-stats)))))
   (message "Updating quests...")
   (dolist (quest hq-quests)
     (unless (plist-get quest :completed)
@@ -681,25 +692,16 @@ Each category must be a plist with fields :name (string, category name),
 
 (defun hq-org-habit-streak-hook ()
   "Hook for adding to org-habit-streak-count for integration with the quest system."
-  (with-current-buffer "*Org Agenda*"
-    (save-excursion
-      (goto-char (point-min))
-      (while (not (eobp))
-        (when (get-text-property (point) 'org-habit-p)
-          (let* ((marker (get-text-property (point) 'org-hd-marker))
-                 (habit-name nil))
-            (when marker
-              (with-current-buffer (marker-buffer marker)
-                (save-excursion
-                  (goto-char (marker-position marker))
-                  (setq habit-name (org-get-heading t t t t))))
-              (when (and hq-daily-bonus habit-name
-                         (string= habit-name (plist-get hq-daily-bonus :habit)))
-                (save-excursion
-                  (end-of-line)
-                  (let ((inhibit-read-only t))
-                    (insert " 🌟")))))))
-        (forward-line 1)))))
+  (hq--map-agenda-habit-lines
+   (lambda ()
+     (let* ((marker (get-text-property (point) 'org-hd-marker))
+            (habit-name (hq--habit-name-at-marker marker)))
+       (when (and hq-daily-bonus habit-name
+                  (string= habit-name (plist-get hq-daily-bonus :habit)))
+         (save-excursion
+           (end-of-line)
+           (let ((inhibit-read-only t))
+             (insert " 🌟"))))))))
 
 (defun hq-complete-quest (quest-name)
   "Manually complete a quest and claim its reward."
@@ -752,16 +754,6 @@ Each category must be a plist with fields :name (string, category name),
           (error
            (message "Error updating quest information")))))))
 
-(defun hq-update-quest-info ()
-  "Update quest information in the agenda."
-  (when (string= (buffer-name) "*Org Agenda*")
-    (message "Updating quest progress...")
-    (hq-update-quest-progress)
-    (let ((inhibit-read-only t))
-      (save-excursion
-        (goto-char (point-max))
-        (hq-add-quest-info-to-agenda)))))
-
 (defun hq-setup ()
   "Set up the habit quest system."
   (interactive)
@@ -797,17 +789,15 @@ Each category must be a plist with fields :name (string, category name),
 
 (defun org-habit-streak-count ()
   "Display current streak for each habit in org-agenda."
-  (goto-char (point-min))
-  (while (not (eobp))
-    (when (get-text-property (point) 'org-habit-p)
-      (let ((streak 0))
-        (save-excursion
-          (when (re-search-forward "\\([○●◎]\\)+" (line-end-position) t)
-            (let ((state-str (match-string 0)))
-              (setq streak (org-habit-count-last-streak state-str)))))
-        (end-of-line)
-        (insert (format " [🔥 %d]" streak))))
-    (forward-line 1)))
+  (hq--map-agenda-habit-lines
+   (lambda ()
+     (let ((streak 0))
+       (save-excursion
+         (when (re-search-forward "\\([○●◎]\\)+" (line-end-position) t)
+           (let ((state-str (match-string 0)))
+             (setq streak (org-habit-count-last-streak state-str)))))
+       (end-of-line)
+       (insert (format " [🔥 %d]" streak))))))
 
 (defun my-find-work-habit ()
   "Find the '3+ hours of work' habit in org files and return its data."
