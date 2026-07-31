@@ -127,15 +127,20 @@ The package installs the following bindings:
 
 * Configuration
 ** Faces and glyphs
-The ~org-habit-*~ faces are set to render the graph cells as squares with the ~Iosevka Nerd Font~ family and custom glyphs (~○~, ~◎~, ~●~). The graph spans 14 preceding days (~org-habit-preceding-days~) and 1 following day.
+The ~org-habit-*~ faces are set to render the graph cells as squares with a fixed color palette and custom glyphs (~○~, ~◎~, ~●~). The graph spans 14 preceding days (~org-habit-preceding-days~) and 1 following day.
 
-The habit graph cells render as squares only with a proportional (non-mono) font; a mono fallback produces narrow rectangles.
+No specific font is required. The graph cells render as squares only with a proportional (non-mono) font; with a monospace default they appear as narrow rectangles. To force a square appearance, set ~better-org-habit-graph-font-family~ to a proportional font of your choice:
+
+#+begin_src emacs-lisp
+(setq better-org-habit-graph-font-family "Iosevka Nerd Font")
+#+end_src
 
 ** Customize group
 Run ~M-x customize-group RET org-habit~ to adjust graph column, preceding/following days, glyphs, and face colors.
 
 * Known Issues
 - ~org-habit-*~ variables produce "free variable" warnings when byte-compiling the file standalone; they are defined by ~org-habit~ at load time and are not errors.
+- With a monospace default font the graph cells render as narrow rectangles; set ~better-org-habit-graph-font-family~ to a proportional font to fix this.
 - The stat files originate from [[https://github.com/ml729/org-habit-stats/][org-habit-stats]] and [[https://orgmode.org][Org]]; some internal helpers carry their original names.
 
 * Contributing

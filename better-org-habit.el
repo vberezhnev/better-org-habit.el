@@ -11,9 +11,9 @@
 ;; integration with `better-org-habit-stats'.
 
 ;;; Code:
-;; The habit graph cells render as squares only with a proportional (non-Mono)
-;; font. The org-habit-* faces below force :family "Iosevka Nerd Font", which
-;; makes the ○/● glyphs ~square; a Mono fallback produces narrow rectangles.
+;; The habit graph cells render as squares only with a proportional (non-mono)
+;; font. Set `better-org-habit-graph-font-family' (e.g. "Iosevka Nerd Font")
+;; when the cells appear as narrow rectangles.
 
 ;; (require 'better-org-habit-custom)
 ;; (require 'better-org-habit-stats)
@@ -62,64 +62,65 @@ Ignored unless the user runs `org-super-agenda'."
   :type '(repeat sexp)
   :group 'better-org-habit)
 
+(defcustom better-org-habit-graph-font-family nil
+  "Font family used for the org-habit graph cells.
+The graph cells render as squares only with a proportional (non-mono)
+font. When nil, the current default face font is used and the cells may
+appear as narrow rectangles."
+  :type '(choice (const :tag "Use the default font" nil)
+                 string)
+  :group 'better-org-habit)
+
 (progn
   (custom-set-faces
    '(org-habit-clear-face
      ((t (:background "pale green"
                      :foreground "white"
-                     :width expanded
-                     :height 1.0
-                     :family "Iosevka Nerd Font"
-                     :box (:line-width (1 . 1) :color "white")))))
+                      :width expanded
+                      :height 1.0
+                      :box (:line-width (1 . 1) :color "white")))))
    '(org-habit-clear-future-face
      ((t (:background "gray"
                      :foreground "white"
-                     :width expanded
-                     :height 1.0
-                     :family "Iosevka Nerd Font"
-                     :box (:line-width (1 . 1) :color "white")))))
+                      :width expanded
+                      :height 1.0
+                      :box (:line-width (1 . 1) :color "white")))))
    '(org-habit-alert-future-face
      ((t (:background "light coral"
                      :foreground "white"
-                     :width expanded
-                     :height 1.0
-                     :family "Iosevka Nerd Font"
-                     :box (:line-width (1 . 1) :color "white")))))
+                      :width expanded
+                      :height 1.0
+                      :box (:line-width (1 . 1) :color "white")))))
    '(org-habit-alert-face
      ((t (:background "light coral"
                      :foreground "white"
-                     :width expanded
-                     :height 1.0
-                     :family "Iosevka Nerd Font"
-                     :box (:line-width (1 . 1) :color "white")))))
+                      :width expanded
+                      :height 1.0
+                      :box (:line-width (1 . 1) :color "white")))))
    '(org-habit-overdue-face
      ((t (:background "light coral"
                      :foreground "white"
-                     :width expanded
-                     :height 1.0
-                     :family "Iosevka Nerd Font"
-                     :box (:line-width (1 . 1) :color "white")))))
+                      :width expanded
+                      :height 1.0
+                      :box (:line-width (1 . 1) :color "white")))))
    '(org-habit-overdue-future-face
      ((t (:background "gray"
                      :foreground "white"
-                     :width expanded
-                     :height 1.0
-                     :family "Iosevka Nerd Font"
-                     :box (:line-width (1 . 1) :color "white")))))
+                      :width expanded
+                      :height 1.0
+                      :box (:line-width (1 . 1) :color "white")))))
    '(org-habit-ready-face
      ((t (:background "pale green"
                      :foreground "white"
-                     :width expanded
-                     :height 1.0
-                     :family "Iosevka Nerd Font"
-                     :box (:line-width (1 . 1) :color "white")))))
+                      :width expanded
+                      :height 1.0
+                      :box (:line-width (1 . 1) :color "white")))))
    '(org-habit-ready-future-face
      ((t (:background "gray"
                      :foreground "white"
-                     :width expanded
-                     :height 1.0
-                     :family "Iosevka Nerd Font"
-                     :box (:line-width (1 . 1) :color "white"))))))
+                      :width expanded
+                      :height 1.0
+                      :box (:line-width (1 . 1) :color "white"))))))
   (setq org-habit-following-days 1
         org-habit-preceding-days 14 ;;6
         org-habit-show-habits nil
@@ -131,6 +132,22 @@ Ignored unless the user runs `org-super-agenda'."
         org-habit-today-glyph ?◎
         org-habit-completed-glyph ?●
         org-habit-show-done-always-green t))
+
+(defvar better-org-habit--graph-faces
+  '(org-habit-clear-face org-habit-clear-future-face
+    org-habit-ready-face org-habit-ready-future-face
+    org-habit-alert-face org-habit-alert-future-face
+    org-habit-overdue-face org-habit-overdue-future-face)
+  "org-habit faces used for the graph cells.")
+
+(defun better-org-habit--apply-graph-font-family ()
+  "Apply `better-org-habit-graph-font-family' to the graph faces."
+  (dolist (face better-org-habit--graph-faces)
+    (when (facep face)
+      (set-face-attribute face nil :family better-org-habit-graph-font-family))))
+
+(when better-org-habit-graph-font-family
+  (better-org-habit--apply-graph-font-family))
 
 (defun toggle-org-habit-show-all-today ()
   "Toggle the value of `org-habit-show-all-today' between t and nil."
