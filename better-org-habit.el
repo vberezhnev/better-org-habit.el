@@ -22,6 +22,46 @@
 (require 'org-agenda)
 (require 'cl-lib)
 
+;;; Customization
+
+(defgroup better-org-habit nil
+  "Enhanced habit tracking for Org mode."
+  :group 'org
+  :prefix "better-org-habit-")
+
+(defcustom better-org-habit-view-files nil
+  "Org files backing the habit agenda view.
+When non-nil, `better-org-habit-install-view' adds a dedicated
+agenda command showing only the habits from these files."
+  :type '(repeat file)
+  :group 'better-org-habit)
+
+(defcustom better-org-habit-view-key "x"
+  "Single-character agenda dispatch key for the habit view."
+  :type 'string
+  :group 'better-org-habit)
+
+(defcustom better-org-habit-view-description "🧘 Habits"
+  "Description shown in the agenda dispatch for the habit view."
+  :type 'string
+  :group 'better-org-habit)
+
+(defcustom better-org-habit-view-span 'day
+  "Time span of the habit agenda view (day, week, month, ...)."
+  :type 'symbol
+  :group 'better-org-habit)
+
+(defcustom better-org-habit-view-prefix-format "  ∘ %t %s"
+  "Prefix format used for habit lines in the agenda view."
+  :type 'string
+  :group 'better-org-habit)
+
+(defcustom better-org-habit-view-groups nil
+  "Grouping spec for `org-super-agenda' within the habit view.
+Ignored unless the user runs `org-super-agenda'."
+  :type '(repeat sexp)
+  :group 'better-org-habit)
+
 (progn
   (custom-set-faces
    '(org-habit-clear-face
@@ -155,8 +195,39 @@ Counts backwards from today (or yesterday if today is not done yet)."
        (end-of-line)
        (insert (format " [🔥 %d]" streak))))))
 
+(defun better-org-habit-view-command ()
+  "Return the habit agenda command built from the view customizations.
+Return nil when `better-org-habit-view-files' is nil."
+  (when better-org-habit-view-files
+    `(,better-org-habit-view-key
+      ,better-org-habit-view-description
+      ((agenda ""
+        ((org-agenda-span ',better-org-habit-view-span)
+         (org-habit-show-habits t)
+         (org-agenda-remove-tags t)
+         (org-agenda-prefix-format ,better-org-habit-view-prefix-format)
+         (org-agenda-files ',better-org-habit-view-files)
+         (org-super-agenda-groups ',better-org-habit-view-groups)))))))
+
+(defun better-org-habit-install-view ()
+  "Install the habit agenda view into `org-agenda-custom-commands'.
+The command is added only when `better-org-habit-view-files' is set
+and no command with `better-org-habit-view-key' already exists.
+Call this again after customizing the view options or redefining
+`org-agenda-custom-commands'."
+  (interactive)
+  (let ((command (better-org-habit-view-command)))
+    (when (and command
+               (not (assoc better-org-habit-view-key
+                           org-agenda-custom-commands)))
+      (setq org-agenda-custom-commands
+            (append org-agenda-custom-commands (list command))))))
+
 ;; Hooks and Keybindings
 (add-hook 'org-agenda-finalize-hook 'org-habit-streak-count)
+
+;; Install the habit agenda view if configured
+(better-org-habit-install-view)
 
 (provide 'better-org-habit)
 ;;; better-org-habit.el ends here
