@@ -741,18 +741,16 @@ Each category must be a plist with fields :name (string, category name),
       (org-agenda nil "x")
     (error
      (message "Error opening agenda: %s" err)))
-  (run-with-timer 0.5 nil
-                  (lambda ()
-                    (when (get-buffer "*Org Agenda*")
-                      (with-current-buffer "*Org Agenda*"
-                        (save-excursion
-                          (condition-case nil
-                              (progn
-                                (hq-update-quest-progress)
-                                (let ((inhibit-read-only t))
-                                  (hq-add-quest-info-to-agenda)))
-                            (error
-                             (message "Error updating quest information")))))))))
+  (when (get-buffer "*Org Agenda*")
+    (with-current-buffer "*Org Agenda*"
+      (save-excursion
+        (condition-case nil
+            (progn
+              (hq-update-quest-progress)
+              (let ((inhibit-read-only t))
+                (hq-add-quest-info-to-agenda)))
+          (error
+           (message "Error updating quest information")))))))
 
 (defun hq-update-quest-info ()
   "Update quest information in the agenda."
