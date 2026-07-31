@@ -149,56 +149,56 @@ Each category must be a plist with fields :name (string, category name),
                      :foreground "white"
                      :width expanded
                      :height 1.0
-                     :family "Iosevka"
+                     :family "Iosevka Nerd Font"
                      :box (:line-width (1 . 1) :color "white")))))
    '(org-habit-clear-future-face
      ((t (:background "gray"
                      :foreground "white"
                      :width expanded
                      :height 1.0
-                     :family "Iosevka"
+                     :family "Iosevka Nerd Font"
                      :box (:line-width (1 . 1) :color "white")))))
    '(org-habit-alert-future-face
      ((t (:background "light coral"
                      :foreground "white"
                      :width expanded
                      :height 1.0
-                     :family "Iosevka"
+                     :family "Iosevka Nerd Font"
                      :box (:line-width (1 . 1) :color "white")))))
    '(org-habit-alert-face
      ((t (:background "light coral"
                      :foreground "white"
                      :width expanded
                      :height 1.0
-                     :family "Iosevka"
+                     :family "Iosevka Nerd Font"
                      :box (:line-width (1 . 1) :color "white")))))
    '(org-habit-overdue-face
      ((t (:background "light coral"
                      :foreground "white"
                      :width expanded
                      :height 1.0
-                     :family "Iosevka"
+                     :family "Iosevka Nerd Font"
                      :box (:line-width (1 . 1) :color "white")))))
    '(org-habit-overdue-future-face
      ((t (:background "gray"
                      :foreground "white"
                      :width expanded
                      :height 1.0
-                     :family "Iosevka"
+                     :family "Iosevka Nerd Font"
                      :box (:line-width (1 . 1) :color "white")))))
    '(org-habit-ready-face
      ((t (:background "pale green"
                      :foreground "white"
                      :width expanded
                      :height 1.0
-                     :family "Iosevka"
+                     :family "Iosevka Nerd Font"
                      :box (:line-width (1 . 1) :color "white")))))
    '(org-habit-ready-future-face
      ((t (:background "gray"
                      :foreground "white"
                      :width expanded
                      :height 1.0
-                     :family "Iosevka"
+                     :family "Iosevka Nerd Font"
                      :box (:line-width (1 . 1) :color "white"))))))
   (setq org-habit-following-days 1
         org-habit-preceding-days 6
