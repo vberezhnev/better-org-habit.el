@@ -1574,9 +1574,16 @@ of HABIT-DATA."
 (defun org-habit-stats--insert-divider ()
   "Insert a divider.
 The divider consists of 80 `org-agenda-block-separator'."
-  (insert (make-string 80
-											 ;; (max 80 (window-width))
-											 org-agenda-block-separator))
+  (let ((separator (cond ((characterp org-agenda-block-separator)
+                          org-agenda-block-separator)
+                         ((stringp org-agenda-block-separator)
+                          (if (string-empty-p org-agenda-block-separator)
+                              ?=
+                            (aref org-agenda-block-separator 0)))
+                         (t ?=))))
+    (insert (make-string 80
+                         ;; (max 80 (window-width))
+                         separator)))
   (insert (make-string 1 ?\n)))
 
 (defun org-habit-stats-insert-section-header (name)
