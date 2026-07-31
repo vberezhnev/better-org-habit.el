@@ -1,18 +1,13 @@
 * Habits                                                              :habit:
 :PROPERTIES:
 :ORG_GTD: Habits
-:ID:       8082981b-ec76-42eb-8b51-0dbb688cc990
-:PRICE:    0
 :END:
 ** Everytime                                                     :everytime:
 :PROPERTIES:
-:PRICE:    0
-:ID:       fb912524-4928-4052-b9c5-0cebd8160c16
 :END:
 *** 📝 - Study
 SCHEDULED: <2025-07-16 Wed +1d>
 :PROPERTIES:
-:ID:       ЕГЭ-2025-02-16-11-05-00
 :STYLE:    habit
 :CATEGORY: EGE
 :Current_Streak: 1
@@ -25,7 +20,6 @@ SCHEDULED: <2025-07-16 Wed +1d>
 :Total_Completions: 1
 :Total_Percentage: 100.00%
 :LAST_REPEAT: [2025-02-25 Tue 19:27]
-:PRICE:    0
 :END:
 :LOGBOOK:
 - State "DONE"       from ""           [2025-07-16 Wed 19:27]
@@ -39,7 +33,6 @@ SCHEDULED: <2025-07-16 Wed +1d>
 *** 🚿 - Cold Shower
 SCHEDULED: <2025-07-16 Wed +1d>
 :PROPERTIES:
-:ID:       Контрастный-душ-2025-02-05-21-16-35
 :STYLE:    habit
 :CATEGORY: PERSONAL
 :Current_Streak: 0
@@ -52,7 +45,6 @@ SCHEDULED: <2025-07-16 Wed +1d>
 :Total_Completions: 22
 :Total_Percentage: 28.57%
 :LAST_REPEAT: [2025-04-23 Wed 10:40]
-:PRICE:    0
 :END:
 :LOGBOOK:
 - State "DONE"       from ""           [2025-07-16 Wed 19:27]
@@ -64,7 +56,6 @@ SCHEDULED: <2025-07-16 Wed +1d>
 *** ⚡ - 3+ hours of work 
 SCHEDULED: <2025-07-16 Wed +1d>
 :PROPERTIES:
-:ID:       3-plus-часа-работы-2025-02-05-21-27-54
 :STYLE:    habit
 :CATEGORY: PERSONAL
 :Current_Streak: 2
@@ -77,7 +68,6 @@ SCHEDULED: <2025-07-16 Wed +1d>
 :Total_Completions: 33
 :Total_Percentage: 36.67%
 :LAST_REPEAT: [2025-05-07 Wed 22:34]
-:PRICE:    0
 :END:
 :LOGBOOK:
 - State "DONE"       from ""           [2025-07-15 Tue 19:27]
@@ -91,7 +81,6 @@ SCHEDULED: <2025-07-16 Wed +1d>
 *** 🚶 - 10k steps
 SCHEDULED: <2025-07-16 Wed +1d>
 :PROPERTIES:
-:ID:       10к-шагов-2025-02-06-20-49-08
 :STYLE:    habit
 :CATEGORY: PERSONAL
 :Current_Streak: 0
@@ -104,7 +93,6 @@ SCHEDULED: <2025-07-16 Wed +1d>
 :Total_Completions: 26
 :Total_Percentage: 28.57%
 :LAST_REPEAT: [2025-05-12 Mon 14:28]
-:PRICE:    0
 :END:
 :LOGBOOK:
 - State "DONE"       from ""           [2025-07-14 Mon 19:27]
@@ -115,13 +103,10 @@ SCHEDULED: <2025-07-16 Wed +1d>
 :END:
 ** Morning                                                         :morning:
 :PROPERTIES:
-:PRICE:    0
-:ID:       60a35198-351c-4888-b87e-69c0539ad3c1
 :END:
 *** ⏰ - Wakeup as planned
 SCHEDULED: <2025-07-16 Wed +1d>
 :PROPERTIES:
-:ID:       Проснуться-в-05-30-2025-02-08-06-54-53
 :STYLE:    habit
 :CATEGORY: PERSONAL
 :Current_Streak: 0
@@ -135,7 +120,6 @@ SCHEDULED: <2025-07-16 Wed +1d>
 :Total_Percentage: 33.33%
 :LAST_REPEAT: [2025-04-26 Sat 06:28]
 :LAST_STATE: DONE
-:PRICE:    0
 :END:
 :LOGBOOK:
 - State "DONE"       from ""           [2025-07-16 Wed 19:27]
@@ -148,7 +132,6 @@ SCHEDULED: <2025-07-16 Wed +1d>
 *** 💊 - Pills
 SCHEDULED: <2025-07-16 Wed +1d>
 :PROPERTIES:
-:ID:       БАДы-2025-02-06-20-49-18123
 :STYLE:    habit
 :CATEGORY: PERSONAL
 :RESET_CHECK_BOXES: t
@@ -162,7 +145,6 @@ SCHEDULED: <2025-07-16 Wed +1d>
 :Total_Completions: 74
 :Total_Percentage: 71.84%
 :LAST_REPEAT: [2025-05-20 Tue 15:34]
-:PRICE:    0
 :END:
 :LOGBOOK:
 - State "DONE"       from ""           [2025-07-16 Wed 19:27]
@@ -173,13 +155,10 @@ SCHEDULED: <2025-07-16 Wed +1d>
 :END:
 ** Day                                                                 :day:
 :PROPERTIES:
-:PRICE:    0
-:ID:       1f80bd90-899f-4dc8-8f78-4218c202d8c4
 :END:
 *** 💊 - Pills
 SCHEDULED: <2025-07-16 Wed +1d>
 :PROPERTIES:
-:ID:       БАДы-2025-02-06-20-49-18
 :STYLE:    habit
 :CATEGORY: PERSONAL
 :RESET_CHECK_BOXES: t
@@ -193,7 +172,6 @@ SCHEDULED: <2025-07-16 Wed +1d>
 :Total_Completions: 47
 :Total_Percentage: 72.31%
 :LAST_REPEAT: [2025-05-15 Thu 19:24]
-:PRICE:    0
 :END:
 :LOGBOOK:
 - State "DONE"       from ""           [2025-07-15 Tue 19:27]
@@ -203,13 +181,10 @@ SCHEDULED: <2025-07-16 Wed +1d>
 :END:
 ** Evening                                                         :evening:
 :PROPERTIES:
-:PRICE:    0
-:ID:       f1ee097f-e8b0-411c-8f4e-aed6c2efa27e
 :END:
 *** 😴 - Go to sleep as planned
 SCHEDULED: <2025-07-16 Wed +1d>
 :PROPERTIES:
-:ID:       Соблюдение-режима-сна-2025-02-05-21-16-51
 :STYLE:    habit
 :CATEGORY: PERSONAL
 :Current_Streak: 0
@@ -222,7 +197,6 @@ SCHEDULED: <2025-07-16 Wed +1d>
 :Total_Completions: 27
 :Total_Percentage: 18.88%
 :LAST_REPEAT: [2025-06-29 Sun 12:06]
-:PRICE:    0
 :END:
 :LOGBOOK:
 - State "DONE"       from ""           [2025-07-16 Wed 19:27]
@@ -233,7 +207,6 @@ SCHEDULED: <2025-07-16 Wed +1d>
 *** 📔 - Diary >5 minutes
 SCHEDULED: <2025-07-16 Wed +1d>
 :PROPERTIES:
-:ID:       Ведение-дневника-5-минут-2025-02-08-20-18-15
 :STYLE:    habit
 :CATEGORY: PERSONAL
 :Current_Streak: 0
@@ -246,7 +219,6 @@ SCHEDULED: <2025-07-16 Wed +1d>
 :Total_Completions: 7
 :Total_Percentage: 6.86%
 :LAST_REPEAT: [2025-05-21 Wed 02:53]
-:PRICE:    0
 :END:
 :LOGBOOK:
 - State "DONE"       from ""           [2025-05-20 Tue 02:53]
