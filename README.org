@@ -25,6 +25,26 @@ Or load the files directly:
 (load-file "~/path/to/better-org-habit.el")
 #+end_src
 
+Mine configuration:
+#+begin_src emacs-lisp
+(use-package better-org-habit
+  :straight (better-org-habit :type git :host github
+                              :repo "vberezhnev/better-org-habit.el"
+                              :files ("*.el"))
+  :after org
+  :demand t
+  :init
+  (setq better-org-habit-view-files '("~/Org/agenda/GTD/org-gtd-habits.org")
+        better-org-habit-graph-font-family "Iosevka Nerd Font"
+        better-org-habit-view-groups
+        '((:name "🌍 Everytime" :tag ("everytime"))
+          (:name "🌅 Morning" :tag ("morning"))
+          (:name "☀️ Day" :tag ("day"))
+          (:name "🌙 Evening" :tag ("evening"))
+          (:discard (:anything))
+          (:discard (:not (:tag "habit"))))))
+#+end_src
+
 * Package layout
 The repository ships three files:
 
