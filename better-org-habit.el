@@ -570,25 +570,18 @@ Each category must be a plist with fields :name (string, category name),
 
 (defun hq-calculate-combined-streak (habits habit-stats)
   "Calculate the number of consecutive days all habits were completed."
-  (let ((streaks-data nil))
+  (let ((done-lists '()))
     (dolist (habit habits)
       (when-let ((habit-data (gethash habit habit-stats)))
-        (push (cdr habit-data) streaks-data)))
-    (when (= (length streaks-data) (length habits))
-      (let ((combined-streak 0)
-            (day-index 0)
-            (continue t))
-        (while (and continue
-                    (< day-index (length (car streaks-data))))
-          (let ((all-done t))
-            (dolist (habit-state streaks-data)
-              (when (and (< day-index (length habit-state))
-                         (not (char-equal (aref habit-state day-index) ?●)))
-                (setq all-done nil)))
-            (if all-done
-                (setq combined-streak (1+ combined-streak))
-              (setq continue nil)))
-          (setq day-index (1+ day-index)))
+        (push (cdr habit-data) done-lists)))
+    (when (= (length done-lists) (length habits))
+      (let* ((today (org-today))
+             (day (if (hq--all-days-done-p today done-lists)
+                      today (1- today)))
+             (combined-streak 0))
+        (while (hq--all-days-done-p day done-lists)
+          (setq combined-streak (1+ combined-streak)
+                day (1- day)))
         combined-streak))))
 
 (defun hq--map-agenda-habit-lines (fn)
@@ -611,6 +604,22 @@ FN is called with point at the beginning of the habit line."
         (goto-char (marker-position marker))
         (org-get-heading t t t t)))))
 
+(defun hq--habit-streak (habit)
+  "Return the current streak of consecutive done days for HABIT.
+Counts backwards from today (or yesterday if today is not done yet)."
+  (let* ((done-dates (org-habit-done-dates habit))
+         (today (org-today))
+         (day (if (memq today done-dates) today (1- today)))
+         (streak 0))
+    (while (memq day done-dates)
+      (setq streak (1+ streak)
+            day (1- day)))
+    streak))
+
+(defun hq--all-days-done-p (day done-lists)
+  "Return non-nil if DAY is present in every list of DONE-LISTS."
+  (cl-every (lambda (done) (memq day done)) done-lists))
+
 (defun hq-update-quest-progress ()
   "Update quest progress based on current habit streaks."
   (interactive)
@@ -620,22 +629,14 @@ FN is called with point at the beginning of the habit line."
   (message "Scanning agenda buffer...")
   (hq--map-agenda-habit-lines
    (lambda ()
-     (let* ((marker (get-text-property (point) 'org-hd-marker))
-            (habit-name (hq--habit-name-at-marker marker))
-            (habit-streak 0)
-            (habits-state nil))
+     (let* ((habit (get-text-property (point) 'org-habit-p))
+            (marker (get-text-property (point) 'org-hd-marker))
+            (habit-name (hq--habit-name-at-marker marker)))
        (message "Processing habit at point %d" (point))
-       (save-excursion
-         (end-of-line)
-         (when (re-search-backward "\\[🔥 \\([0-9]+\\)\\]" (line-beginning-position) t)
-           (setq habit-streak (string-to-number (match-string 1))))
-         (when (re-search-backward "\\([○●◎]+\\)" (line-beginning-position) t)
-           (setq habits-state (buffer-substring-no-properties
-                               (match-beginning 1)
-                               (match-end 1)))))
-       (when (and habit-name habit-streak)
+       (when (and habit habit-name)
          (puthash habit-name
-                  (cons habit-streak (or habits-state ""))
+                  (cons (hq--habit-streak habit)
+                        (org-habit-done-dates habit))
                   habit-stats)))))
   (message "Updating quests...")
   (dolist (quest hq-quests)
@@ -768,34 +769,12 @@ FN is called with point at the beginning of the habit line."
       (when (derived-mode-p 'org-agenda-mode)
         (org-agenda-maybe-redo)))))
 
-(defun org-habit-count-last-streak (state-str)
-  "Count consecutive completed days (●), including incomplete tasks (◎)."
-  (let ((streak 0)
-        (length (length state-str))
-        (has-completed nil))
-    (catch 'break
-      (dotimes (i length)
-        (let ((current-char (aref state-str (- length i 1))))
-          (cond
-           ((char-equal current-char ?◎)
-            (when has-completed
-              (setq streak (1+ streak))))
-           ((char-equal current-char ?●)
-            (setq streak (1+ streak))
-            (setq has-completed t))
-           (t
-            (throw 'break streak))))))
-    streak))
-
 (defun org-habit-streak-count ()
   "Display current streak for each habit in org-agenda."
   (hq--map-agenda-habit-lines
    (lambda ()
-     (let ((streak 0))
-       (save-excursion
-         (when (re-search-forward "\\([○●◎]\\)+" (line-end-position) t)
-           (let ((state-str (match-string 0)))
-             (setq streak (org-habit-count-last-streak state-str)))))
+     (let* ((habit (get-text-property (point) 'org-habit-p))
+            (streak (if habit (hq--habit-streak habit) 0)))
        (end-of-line)
        (insert (format " [🔥 %d]" streak))))))
 
