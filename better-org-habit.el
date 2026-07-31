@@ -14,8 +14,8 @@
 ;; With Emacs's default font, org-habit-faces appear as narrow rectangles.
 ;; Consider how to fix this without requiring a specific font to be set globally in Emacs.
 
-(require 'better-org-habit-custom)
-(require 'better-org-habit-stats)
+;; (require 'better-org-habit-custom)
+;; (require 'better-org-habit-stats)
 
 (require 'org)
 (require 'org-agenda)

@@ -32,7 +32,8 @@
 
 ;;; Code:
 
-(require 'better-org-habit-custom)
+;; (require 'better-org-habit-custom)
+(require 'org-habit)
 (require 'org-element)
 (require 'cl-lib)
 (require 'seq)
