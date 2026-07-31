@@ -594,34 +594,39 @@ Each category must be a plist with fields :name (string, category name),
 (defun hq-update-quest-progress ()
   "Update quest progress based on current habit streaks."
   (interactive)
+  (message "Starting hq-update-quest-progress...")
   (clrhash habit-stats)
+  (message "Cleared habit-stats")
   (with-current-buffer "*Org Agenda*"
     (save-excursion
       (goto-char (point-min))
+      (message "Scanning agenda buffer...")
       (while (not (eobp))
         (when (get-text-property (point) 'org-habit-p)
           (let* ((marker (get-text-property (point) 'org-hd-marker))
                  (habit-name nil)
                  (habit-streak 0)
                  (habits-state nil))
+            (message "Processing habit at point %d" (point))
             (when marker
               (with-current-buffer (marker-buffer marker)
                 (save-excursion
                   (goto-char (marker-position marker))
-                  (setq habit-name (org-get-heading t t t t))))
-              (save-excursion
-                (end-of-line)
-                (when (re-search-backward "\\[🔥 \\([0-9]+\\)\\]" (line-beginning-position) t)
-                  (setq habit-streak (string-to-number (match-string 1)))
-                  (when (re-search-backward "\\([○●◎]+\\)" (line-beginning-position) t)
-                    (setq habits-state (buffer-substring-no-properties
-                                        (match-beginning 1)
-                                        (match-end 1))))
-                  (when (and habit-name habit-streak)
-                    (puthash habit-name
-                             (cons habit-streak (or habits-state ""))
-                             habit-stats))))))
-          (forward-line 1)))))
+                  (setq habit-name (org-get-heading t t t t)))))
+            (save-excursion
+              (end-of-line)
+              (when (re-search-backward "\\[🔥 \\([0-9]+\\)\\]" (line-beginning-position) t)
+                (setq habit-streak (string-to-number (match-string 1))))
+              (when (re-search-backward "\\([○●◎]+\\)" (line-beginning-position) t)
+                (setq habits-state (buffer-substring-no-properties
+                                    (match-beginning 1)
+                                    (match-end 1)))))
+            (when (and habit-name habit-streak)
+              (puthash habit-name
+                       (cons habit-streak (or habits-state ""))
+                       habit-stats))))
+        (forward-line 1))))
+  (message "Updating quests...")
   (dolist (quest hq-quests)
     (unless (plist-get quest :completed)
       (let* ((habits (plist-get quest :habits))
@@ -634,7 +639,9 @@ Each category must be a plist with fields :name (string, category name),
           (setq current-progress
                 (hq-calculate-combined-streak habits habit-stats)))
         (setf (plist-get quest :progress) current-progress))))
-  (hq-save-data))
+  (message "Saving data...")
+  (hq-save-data)
+  (message "Quest progress updated!"))
 
 (defun hq-generate-daily-bonus ()
   "Generate a new daily bonus task."
