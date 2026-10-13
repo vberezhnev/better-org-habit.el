@@ -301,8 +301,7 @@
          (start (time-to-days starting))
          (now (time-to-days current))
          (end (time-to-days ending))
-         (graph (make-string (1+ (- end start)) ?\s))
-         (index 0)
+         (parts nil)
          last-done-date)
     (while (and done-dates (< (car done-dates) start))
       (setq last-done-date (car done-dates)
@@ -343,26 +342,29 @@
                                   (when (= done last-done-date)
                                     (throw :exit s))))))))))
                  donep)))
-             markedp face)
-        (cond
-         (donep
-          (aset graph index org-habit-completed-glyph)
-          (setq markedp t)
-          (while (and done-dates (= start (car done-dates)))
-            (setq last-done-date (car done-dates)
-                  done-dates (cdr done-dates))))
-         (todayp
-          (aset graph index org-habit-today-glyph))
-         ((eq (if in-the-past-p (car faces) (cdr faces)) 'org-habit-ready-future-face)
-          (aset graph index org-habit-ready-future-glyph))
-         ((eq (if in-the-past-p (car faces) (cdr faces)) 'org-habit-clear-face)
-          (aset graph index org-habit-clear-glyph))
-         ((eq (if in-the-past-p (car faces) (cdr faces)) 'org-habit-alert-face)
-          (aset graph index org-habit-alert-glyph))
-         ((eq (if in-the-past-p (car faces) (cdr faces)) 'org-habit-overdue-face)
-          (aset graph index org-habit-overdue-glyph))
-         (t
-          (aset graph index org-habit-ready-future-glyph)))
+             (markedp nil)
+             (face nil)
+             (glyph nil))
+        (setq glyph
+              (cond
+               (donep
+                (setq markedp t)
+                (while (and done-dates (= start (car done-dates)))
+                  (setq last-done-date (car done-dates)
+                        done-dates (cdr done-dates)))
+                org-habit-completed-glyph)
+               (todayp
+                org-habit-today-glyph)
+               ((eq (if in-the-past-p (car faces) (cdr faces)) 'org-habit-ready-future-face)
+                org-habit-ready-future-glyph)
+               ((eq (if in-the-past-p (car faces) (cdr faces)) 'org-habit-clear-face)
+                org-habit-clear-glyph)
+               ((eq (if in-the-past-p (car faces) (cdr faces)) 'org-habit-alert-face)
+                org-habit-alert-glyph)
+               ((eq (if in-the-past-p (car faces) (cdr faces)) 'org-habit-overdue-face)
+                org-habit-overdue-glyph)
+               (t
+                org-habit-ready-future-glyph)))
         (setq face (if (or in-the-past-p todayp)
                        (car faces)
                      (cdr faces)))
@@ -370,17 +372,19 @@
                    (not (eq face 'org-habit-overdue-face))
                    (not markedp))
           (setq face (cdr faces)))
-        (put-text-property index (1+ index) 'face face graph)
-        (put-text-property index (1+ index)
-                           'help-echo
-                           (concat (format-time-string
-                                    (org-time-stamp-format)
-                                    (time-add starting (days-to-time (- start (time-to-days starting)))))
-                                   (if donep " DONE" ""))
-                           graph))
-      (setq start (1+ start)
-            index (1+ index)))
-    graph))
+        (push (propertize
+               (char-to-string glyph)
+               'face face
+               'help-echo
+               (concat (format-time-string
+                        (org-time-stamp-format)
+                        (time-add starting (days-to-time (- start (time-to-days starting)))))
+                       (if donep " DONE" "")))
+              parts))
+      (setq start (1+ start)))
+    ;; The original string had one trailing plain space (length = end - start + 1).
+    (push " " parts)
+    (apply #'concat (nreverse parts))))
 
 (defun org-habit-insert-consistency-graphs (&optional line)
   "Insert consistency graph for habitual tasks."
